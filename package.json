@@ -1,7 +1,13 @@
 {
-  "name": "my-app",
-  "version": "0.1.0",
-  "private": true,
+  "name": "color-shades",
+  "version": "1.0.0",
+  "private": false,
+  "author": {
+    "name": "David Fusilier",
+    "email": "dfusil2@gmail.com",
+    "url": "http://www.davidfusilier.com/"
+  },
+  "homepage": "https://dfusilier.github.io/color-shades",
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
