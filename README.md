@@ -1,8 +1,10 @@
 # color-shades-site
 
-Determine WCAG 2.1 color contrast at a glance from the names of colors. 
+Use shades to determine accessible color contrast at a glance.
 
-- Use this tool to generate numerical shades for your colors (for example, green20).
-- Add shades to your color names.
-- Colors with a difference of 100 or more have ≥ 4.5 contrast.
-- Colors with a difference of 75 or more have ≥ 3.0 contrast.
+- Use to generate a numerical shade from 0 to 200 based on a color's luminance.
+- Use shades when naming colors (for example, "green105").
+- Two colors with a difference of 100 or more have ≥ 4.5 contrast.
+- Two colors with a difference of 75 or more have ≥ 3.0 contrast.
+
+
