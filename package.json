@@ -7,7 +7,7 @@
     "email": "dfusil2@gmail.com",
     "url": "http://www.davidfusilier.com/"
   },
-  "homepage": "https://dfusilier.github.io/color-shades",
+  "homepage": ".",
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
