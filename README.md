@@ -1,4 +1,4 @@
-# color-shades-site
+# color-shades
 
 Use shades to determine accessible color contrast at a glance.
 
