@@ -112,7 +112,7 @@ const Header = styled.div`
   ${({bg}) => bg ? cssTheme(bg) : ""}
   display: flex;
   gap: 2rem;
-  padding-block: 32px;
+  padding-block: 24px;
   padding-inline: 24px;
   margin: auto;
   width: 100%;
@@ -120,6 +120,7 @@ const Header = styled.div`
   align-items: center;
 
   @media (min-width: 768px) {
+    padding-block: 48px;
     padding-inline: 48px;
     min-height: 95vh;
   }
