@@ -8,7 +8,7 @@ const Box = styled.div`
   --box-padding-inline: 24px;
 
   border: 1px solid var(--color-fg);
-  border-radius: 6px;
+  border-radius: 8px;
 
   @media (min-width: 768px) {
     --box-padding-block: 32px;

@@ -39,9 +39,6 @@ const GlobalStyles = createGlobalStyle`
 
         --font-size-5: 3rem;
         --line-height-5: 1.0;
-
-        --font-size-6: 5rem;
-        --line-height-6: 1.0;
         
         background: var(--color-bg);
         color: var(--color-fg);
@@ -50,6 +47,14 @@ const GlobalStyles = createGlobalStyle`
         line-height: var(--line-height-0);
         padding: 0;
         margin: 0 auto;
+
+        @media (min-width: 768px) {
+            --font-size-4: 3rem;
+            --line-height-4: 1.0;
+
+            --font-size-5: 5rem;
+            --line-height-5: 1.0;
+        }
     }
 
     .type-size-00 {
@@ -82,29 +87,9 @@ const GlobalStyles = createGlobalStyle`
         line-height: var(--line-height-4);
     }
 
-    .type-size-4r {
-        font-size: var(--font-size-4);
-        line-height: var(--line-height-4);
-
-        @media (min-width: 768px) {
-            font-size: var(--font-size-5);
-            line-height: var(--line-height-5);
-        }
-    }
-
     .type-size-5 {
         font-size: var(--font-size-5);
         line-height: var(--line-height-5);
-    }
-
-    .type-size-5r {
-        font-size: var(--font-size-5);
-        line-height: var(--line-height-5);
-
-        @media (min-width: 768px) {
-            font-size: var(--font-size-6);
-            line-height: var(--line-height-6);
-        }
     }
 
     .type-size-6 {
@@ -114,6 +99,10 @@ const GlobalStyles = createGlobalStyle`
 
     .font-weight-bold {
         font-weight: bold;
+    }
+
+    .font-variant-tabular {
+        font-variant-numeric: tabular-nums;
     }
 
     p, h1, h2, h3, h4, h5, h6, ul, ol, li {
@@ -181,10 +170,6 @@ const GlobalStyles = createGlobalStyle`
     .gap-4      { gap: 2rem; }
     .gap-5      { gap: 3rem; }
     .gap-6      {  gap: 4rem; }
-
-    
-
-    
 `
 
 export default GlobalStyles;

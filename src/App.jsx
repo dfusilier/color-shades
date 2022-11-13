@@ -1,18 +1,35 @@
 import React, { useState } from 'react';
 import styled from "styled-components";
 import Color from 'color';
+import { useSearchParams } from 'react-router-dom';
+
+// Utils
 import calcShade from './utils/calcShade';
 import cssTheme from './utils/makeTheme';
+import pickRandom from './utils/pickRandom';
 
+// Components
 import GlobalStyles from './GlobalStyles';
+import Box from './components/Box';
 import FormGroup from './components/FormGroup';
 import TextField from './components/TextField';
-import Box from './components/Box';
-// import BigSwatch from './components/BigSwatch';
-
 
 const App = () => {
-  const [colorString, setColorString] = useState("#2E8B57");
+  let [searchParams, setSearchParams] = useSearchParams();
+  const colorStringDefaults = [
+    "#2E8B57", // seagreen
+    "#708090", // slategray
+    "#FF6347", // tomato
+    "#1E90FF", // dodgerblue
+    "#87CEFA", // lightskyblue
+    "#E6E6FA", // lavender
+    "#FFE4E1", // mistyrose
+    "#483D8B", // darkslateblue
+    "#FFD700", // gold
+    "#800000"  // maroon
+  ];
+  const colorString = searchParams.get("color") || pickRandom(colorStringDefaults);
+
   const black = new Color("black");
   let color;
 
@@ -21,7 +38,7 @@ const App = () => {
   } catch {
     try {
       new Color("#" + colorString);
-      setColorString("#" + colorString);
+      setSearchParams({ color: "#" + colorString });
     } catch {}
   }
   
@@ -37,8 +54,8 @@ const App = () => {
         
         <Box bg={"#161616"}>
           <Box.Column>
-            <Box.Cell className="flex-column gap-00">
-              <h1 className="type-size-4r">Color shades</h1>
+            <Box.Cell className="flex-column gap-0">
+              <h1 className="type-size-4">Color shades</h1>
               <p className="type-size-1">Calculate a color's shade and use it to quickly determine color contrast.</p>
             </Box.Cell>
             <Box.Cell>
@@ -50,14 +67,14 @@ const App = () => {
                   name="color-input"
                   type="text" 
                   value={colorString}
-                  onChange={e => setColorString(e.target.value)} 
+                  onChange={e => setSearchParams({ color: e.target.value })} 
                 />
               </FormGroup>
             </Box.Cell>
             <Box.ResponsiveRow>
               <Box.Cell className="flex-column gap-000">
-                <h2>Shade</h2>
-                <div className="type-size-5r">{shade}</div>
+                <h2>Shade (0–200)</h2>
+                <div className="type-size-5">{shade}</div>
               </Box.Cell>
               <Box.Cell className="flex-column gap-000">
                 <h2>How to use</h2>
@@ -89,8 +106,8 @@ const Header = styled.div`
   align-items: center;
 
   @media (min-width: 768px) {
-      padding-inline: 48px;
-      min-height: 95vh;
+    padding-inline: 48px;
+    min-height: 95vh;
   }
 `
 
