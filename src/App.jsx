@@ -28,11 +28,15 @@ const App = () => {
     "#FFD700", // gold
     "#800000"  // maroon
   ];
-  const colorString = searchParams.get("color") || pickRandom(colorStringDefaults);
+  
+  const colorSearchParam = searchParams.get("color");
 
-  const black = new Color("black");
+  // Null is returned when there's no color query.
+  // Undefined when there's a blank color query,
+  // which happens when someone clears the field.
+  const colorString = colorSearchParam === null ? pickRandom(colorStringDefaults) : colorSearchParam;
+  
   let color;
-
   try {
     color = new Color(colorString);
   } catch {
@@ -41,7 +45,8 @@ const App = () => {
       setSearchParams({ color: "#" + colorString });
     } catch {}
   }
-  
+
+  const black = new Color("black");
   const shade = color ? 
     Math.round(
       calcShade(color.contrast(black, "WCAG21"))
