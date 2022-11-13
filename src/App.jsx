@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styled from "styled-components";
-import Color from 'colorjs.io';
+import Color from 'color';
 import calcShade from './utils/calcShade';
 import cssTheme from './utils/makeTheme';
 

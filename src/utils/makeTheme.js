@@ -1,4 +1,3 @@
-// import Color from "colorjs.io";
 import suggestTextColor from "./suggestTextColor";
 
 const cssTheme = bg => {

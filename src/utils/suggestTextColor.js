@@ -1,4 +1,4 @@
-import Color from "colorjs.io";
+import Color from "color";
 
 const white = new Color("white");
 
