@@ -39,7 +39,7 @@ const App = () => {
           <Box.Column>
             <Box.Cell className="flex-column gap-00">
               <h1 className="type-size-4r">Color shades</h1>
-              <p className="type-size-1">Use shades to determine accessible color contrast at a glance.</p>
+              <p className="type-size-1">Calculate a color's shade and use it to quickly determine color contrast.</p>
             </Box.Cell>
             <Box.Cell>
               <FormGroup className="flex-column gap-00" style={{ marginBlockEnd: "8px"}}>
