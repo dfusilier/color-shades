@@ -82,14 +82,15 @@ const Header = styled.div`
 
   display: flex;
   gap: 2rem;
-  padding: 24px 24px;
+  padding-block: 48px;
+  padding-inline: 24px;
   margin: auto;
   max-width: 864px;
-  min-height: 95vh;
   align-items: center;
 
   @media (min-width: 768px) {
-      padding: 48px 48px;
+      padding-inline: 48px;
+      min-height: 95vh;
   }
 `
 
