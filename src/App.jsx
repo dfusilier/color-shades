@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from "styled-components";
 import Color from 'color';
 import { useSearchParams } from 'react-router-dom';
@@ -11,24 +11,11 @@ import pickRandom from './utils/pickRandom';
 // Components
 import GlobalStyles from './GlobalStyles';
 import Box from './components/Box';
-import FormGroup from './components/FormGroup';
 import TextField from './components/TextField';
+import ColorPicker from './components/ColorPicker';
 
 const App = () => {
   let [searchParams, setSearchParams] = useSearchParams();
-  const colorStringDefaults = [
-    "#2E8B57", // seagreen
-    "#708090", // slategray
-    "#FF6347", // tomato
-    "#1E90FF", // dodgerblue
-    "#87CEFA", // lightskyblue
-    "#E6E6FA", // lavender
-    "#FFE4E1", // mistyrose
-    "#483D8B", // darkslateblue
-    "#FFD700", // gold
-    "#800000"  // maroon
-  ];
-  
   const colorSearchParam = searchParams.get("color");
 
   // Null is returned when there's no color query.
@@ -46,10 +33,9 @@ const App = () => {
     } catch {}
   }
 
-  const black = new Color("black");
   const shade = color ? 
     Math.round(
-      calcShade(color.contrast(black, "WCAG21"))
+      calcShade(color.contrast(black))
     ) : "?";
     
   return (
@@ -64,17 +50,26 @@ const App = () => {
               <p className="type-size-1">Calculate a color's shade and use it to quickly determine color contrast.</p>
             </Box.Cell>
             <Box.Cell>
-              <FormGroup className="flex-column gap-00" style={{ marginBlockEnd: "8px"}}>
-                <label htmlFor="color-input">Color</label>
-                <TextField 
-                  className="type-size-2"
-                  id="color-input" 
-                  name="color-input"
-                  type="text" 
-                  value={colorString}
-                  onChange={e => setSearchParams({ color: e.target.value })} 
-                />
-              </FormGroup>
+              <fieldset className="stack-00">
+                <legend>Color</legend>
+                <div className="flex-row gap-1" style={{ alignItems: "end", marginBlockEnd: "8px"}}>
+                  <TextField 
+                    className="type-size-2"
+                    aria-label="Enter color"
+                    id="color-input" 
+                    name="color-input"
+                    type="text" 
+                    value={colorString}
+                    onChange={e => setSearchParams({ color: e.target.value })} 
+                  />
+                  <ColorPicker 
+                    aria-label="Edit color"
+                    value={colorString} 
+                    onChange={e => setSearchParams({ color: e.target.value })}
+                    bg={colorString} 
+                  />
+                </div>
+              </fieldset>
             </Box.Cell>
             <Box.ResponsiveRow>
               <Box.Cell className="flex-column gap-000">
@@ -99,14 +94,28 @@ const App = () => {
 
 export default App;
 
+const black = new Color("black");
+const colorStringDefaults = [
+  "#2E8B57", // seagreen
+  "#708090", // slategray
+  "#FF6347", // tomato
+  "#1E90FF", // dodgerblue
+  "#87CEFA", // lightskyblue
+  "#E6E6FA", // lavender
+  "#FFE4E1", // mistyrose
+  "#483D8B", // darkslateblue
+  "#FFD700", // gold
+  "#800000"  // maroon
+];
+
 const Header = styled.div`
   ${({bg}) => bg ? cssTheme(bg) : ""}
-
   display: flex;
   gap: 2rem;
   padding-block: 48px;
   padding-inline: 24px;
   margin: auto;
+  width: 100%;
   max-width: 864px;
   align-items: center;
 
@@ -115,6 +124,3 @@ const Header = styled.div`
     min-height: 95vh;
   }
 `
-
-
-

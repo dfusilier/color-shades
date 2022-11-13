@@ -7,6 +7,7 @@ const Box = styled.div`
   --box-padding-block: 24px;
   --box-padding-inline: 24px;
 
+  width: 100%;
   border: 1px solid var(--color-fg);
   border-radius: 8px;
 

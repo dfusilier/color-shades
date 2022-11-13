@@ -1,6 +1,8 @@
 import styled from "styled-components";
 
-const TextField = styled.input`
+const TextField = styled.input.attrs(props => ({
+    type: props.type || "text"
+}))`
     background: var(--color-bg);
     color: var(--color-fg);
     border: 3px solid var(--color-fg);
@@ -9,6 +11,7 @@ const TextField = styled.input`
     padding: 8px 12px;
     font-size: inherit;
     line-height: inherit;
+    width: 100%;
 `
 
 export default TextField;
