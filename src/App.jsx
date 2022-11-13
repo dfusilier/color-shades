@@ -112,7 +112,7 @@ const Header = styled.div`
   ${({bg}) => bg ? cssTheme(bg) : ""}
   display: flex;
   gap: 2rem;
-  padding-block: 48px;
+  padding-block: 32px;
   padding-inline: 24px;
   margin: auto;
   width: 100%;
