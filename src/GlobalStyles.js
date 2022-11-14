@@ -161,6 +161,14 @@ const GlobalStyles = createGlobalStyle`
         align-items: stretch;
     }
 
+    .flex-align-center {
+        align-items: center;
+    }
+
+    .flex-justify-center {
+        justify-content: center;
+    }
+
     .gap-000    { gap: 0.5rem; }
     .gap-00     { gap: 0.75rem; }
     .gap-0      { gap: 1rem; }
@@ -169,7 +177,39 @@ const GlobalStyles = createGlobalStyle`
     .gap-3      { gap: 1.75rem; }
     .gap-4      { gap: 2rem; }
     .gap-5      { gap: 3rem; }
-    .gap-6      {  gap: 4rem; }
+    .gap-6      { gap: 4rem; }
+
+    .flex-shrink { flex-shrink: 1; }
+    .flex-no-shrink { flex-shrink: 0; }
+    .flex-grow { flex-grow: 1; }
+    .flex-no-grow { flex-grow: 0; }
+    .flex-basis-min-content { flex-basis: min-content; }
+
+    .flex-fit-y {
+        height: auto;
+        flex: 0 0 auto;
+    }
+    .flex-fit-x {
+        width: auto;
+        flex: 0 0 auto;
+    }
+    .flex-fill-x {
+        flex: 1 1 100%;
+    }
+    .flex-fill-y {
+        flex: 1 1 100%;
+    }
+
+    .grid-columns {
+        display: grid;
+        grid-auto-flow: row;
+        grid-auto-rows: minmax(min-content, 1fr);
+    }
+    .grid-rows {
+        display: grid;
+        grid-auto-flow: column;
+        grid-auto-columns: minmax(min-content, 1fr);
+    }
 
     legend {
         padding: 0;
