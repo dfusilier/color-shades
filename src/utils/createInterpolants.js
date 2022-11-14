@@ -1,8 +1,10 @@
-import Color from 'color';
+import Color from 'colorjs.io';
 import { createInterpolant } from "./createInterpolant";
 
 const createInterpolants = (color, hStart, hEnd, sStart, sEnd) => {
-  const [hBase, sBase, lBase] = color.hsl().array();
+  color = color.to("hsl");
+
+  const [hBase, sBase, lBase] = color.coords;
 
   // Note that "== null" will return true for both undefined and null.
   // If changing this, remember to be careful of 0 evaluating to false.
@@ -19,7 +21,7 @@ const createInterpolants = (color, hStart, hEnd, sStart, sEnd) => {
   const intColor = (l) => [intH(l), intS(l), l];
 
   const setLightness = (l) => {
-    return Color.hsl(intColor(l));
+    return new Color({ space: "hsl", coords: intColor(l) });
   }
 
   const changeLightness = (shade, changePercent) => {

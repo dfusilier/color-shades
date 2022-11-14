@@ -1,7 +1,8 @@
-import Color from "color";
+
+import Color from 'colorjs.io';
 import suggestColor from "./suggestColor";
 
-const black = Color("black");
+const black = new Color("black");
 
 // Suggests various shades of a single color.
 
@@ -20,7 +21,7 @@ const shadeFromContrast = ({
 
   const domainMin = 1;
   const domainMax = 21;
-  const predicate = result => black?.contrast(result);
+  const predicate = result => black?.contrastWCAG21(result);
 
   // If targets are provided, use them. If
   // not, use the number of increments to

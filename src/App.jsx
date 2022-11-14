@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from "styled-components";
-import Color from 'color';
+import Color from 'colorjs.io';
 import { useSearchParams } from 'react-router-dom';
 
 // Utils
@@ -33,7 +33,7 @@ const App = () => {
   
   let color;
   try {
-    color = Color(colorString);
+    color = new Color(colorString);
   } catch {
     try {
       new Color("#" + colorString);
@@ -43,7 +43,7 @@ const App = () => {
 
   const shade = color ? 
     Math.round(
-      calcShade(color.contrast(black))
+      calcShade(color.contrastWCAG21(black))
     ) : "?";
 
   const { setLightness } = createInterpolants(color);
@@ -53,7 +53,8 @@ const App = () => {
   const shades = suggestShades({
     manipulation: change => setLightness(change),
     targets: contrastTargets
-  });
+  }).map(shade => shade.to("srgb"));
+
     
   return (
     <div className="App">
@@ -117,14 +118,14 @@ const App = () => {
             <PaletteAndTabs>
               <Palette>
                 {shades.map((shadeColor, i) => (
-                  <Palette.Shade bg={shadeColor.toString()} key={i}>
+                  <Palette.Shade bg={shadeColor.toString({ format: "hex" })} key={i}>
                     <div>
                       {shadeTargets[i] === shade 
                         ? `${shadeTargets[i]} ★`
                         : shadeTargets[i]
                       }
                     </div>
-                    <div>{shadeColor.hex()}</div>
+                    <div>{shadeColor.toString({ format: "hex" })}</div>
                   </Palette.Shade>
                 ))}
               </Palette>
@@ -160,7 +161,7 @@ const App = () => {
 
 export default App;
 
-const black = Color("black");
+const black = new Color("black");
 const colorStringDefaults = [
   "#2E8B57", // seagreen
   "#708090", // slategray

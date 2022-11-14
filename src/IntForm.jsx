@@ -1,20 +1,27 @@
 import React from 'react';
 // import styled from "styled-components";
-// import Color from 'color';
+// import Color from 'colorjs.io';
 
 // Components
 import Box from './components/Box';
 import FormGroup from './components/FormGroup';
 import TextField from './components/TextField';
 
-const abbreviations = {
-  "hue": "h",
-  "saturation": "s"
+// const abbrevsMap = {
+//   "hue": "h",
+//   "saturation": "s"
+// };
+
+const coordsMap = {
+  "hue": 0,
+  "saturation": 1
 };
 
 const IntForm = ({ color, colorProperty }) => {
-  const abbrevColorProperty = abbreviations[colorProperty];
-  
+  // const abbrev = abbrevsMap[colorProperty];
+  const coord = coordsMap[colorProperty];
+  const coords = color.to("hsl").coords;
+  const v = Math.round(coords[coord]);
   return(
     <Box.GridColumn>
     
@@ -26,7 +33,7 @@ const IntForm = ({ color, colorProperty }) => {
             id={`${colorProperty}-start-input`}
             name={`${colorProperty}-start-input`}
             type="number" 
-            value={Math.round(color.hsl().object()[abbrevColorProperty])}
+            value={v}
             onChange={e => {}}
           />
         </FormGroup>
@@ -40,7 +47,7 @@ const IntForm = ({ color, colorProperty }) => {
             id={`${colorProperty}-end-input`}
             name={`${colorProperty}-end-input`}
             type="number" 
-            value={Math.round(color.hsl().object()[abbrevColorProperty])}
+            value={v}
             onChange={e => {}}
           />
         </FormGroup>
@@ -54,7 +61,7 @@ const IntForm = ({ color, colorProperty }) => {
             id="hue-start-input" 
             name="hue-start-input"
             type="number" 
-            value={Math.round(color.hsl().object()[abbrevColorProperty])}
+            value={v}
             onChange={e => {}}
           />
         </FormGroup>
