@@ -7,7 +7,6 @@ const Box = styled.div`
   --box-padding-block: 24px;
   --box-padding-inline: 24px;
 
-  width: 100%;
   position: relative;
   border: 1px solid var(--color-fg);
   border-radius: 8px;
@@ -18,23 +17,11 @@ const Box = styled.div`
     --box-padding-inline: 32px;
   }
 `
-
 Box.Cell = styled.div`
   position: relative;
   padding-block: var(--box-padding-block);
   padding-inline: var(--box-padding-inline);
 `
-Box.FloatingCell = styled.div`
-  position: absolute;
-  top: -1.5rem;
-  left: 0;
-  right: 0;
-  padding-block: 0;
-  padding-inline: var(--box-padding-inline);
-  border-bottom: none !important;
-  height: 0;
-`
-
 Box.Row = styled.div`
   display: flex;
   position: relative;

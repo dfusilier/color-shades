@@ -177,11 +177,9 @@ const colorStringDefaults = [
 
 const Section = styled.section`
   ${({bg}) => bg ? cssTheme(bg) : ""}
-  display: flex;
   padding-block: 8px;
   padding-inline: 24px;
   margin: auto;
-  width: 100%;
   max-width: 864px;
   align-items: center;
 
