@@ -21,7 +21,6 @@ const Box = styled.div`
 
 Box.Cell = styled.div`
   position: relative;
-  width: 100%;
   padding-block: var(--box-padding-block);
   padding-inline: var(--box-padding-inline);
 `
@@ -34,14 +33,12 @@ Box.FloatingCell = styled.div`
   padding-inline: var(--box-padding-inline);
   border-bottom: none !important;
   height: 0;
-  width: 100%;
 `
 
 Box.Row = styled.div`
   display: flex;
   position: relative;
   flex-direction: row;
-  width: 100%;
   & > * {
     &:not(:last-child) {
       border-right: 1px solid var(--color-fg);
@@ -52,7 +49,6 @@ Box.Column = styled.div`
   display: flex;
   position: relative;
   flex-direction: column;
-  width: 100%;
   & > * {
     &:not(:last-child) {
       border-bottom: 1px solid var(--color-fg);
@@ -62,7 +58,6 @@ Box.Column = styled.div`
 
 Box.GridColumn = styled.div`
   display: grid;
-  width: 100%;
   grid-auto-flow: row;
   grid-auto-row: minmax(min-content, 1fr);
   & > * {
