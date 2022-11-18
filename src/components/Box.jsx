@@ -4,7 +4,7 @@ import cssTheme from '../utils/makeTheme';
 const Box = styled.div`
   ${({bg}) => bg ? cssTheme(bg) : ""}
 
-  --box-padding-block: 24px;
+  --box-padding-block: 20px;
   --box-padding-inline: 24px;
 
   position: relative;

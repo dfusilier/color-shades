@@ -1,9 +1,9 @@
 import React from 'react';
 import styled from "styled-components";
 import Color from 'colorjs.io';
-import { useSearchParams } from 'react-router-dom';
 
 // Utils
+import useQueryParams from './utils/useQueryParams';
 import calcShade from './utils/shadeFromContrast';
 import cssTheme from './utils/makeTheme';
 import pickRandom from './utils/pickRandom';
@@ -20,25 +20,31 @@ import TextField from './components/TextField';
 import ColorPicker from './components/ColorPicker'; 
 import Palette from './components/Palette';
 import Tabs from './components/Tabs';
-import IntForm from './IntForm';
+import ColorCoordForm from './ColorCoordForm';
 
 const App = () => {
-  let [searchParams, setSearchParams] = useSearchParams();
-  const colorSearchParam = searchParams.get("color");
+  let [queryParams, setQueryParams] = useQueryParams();
 
   // Null is returned when there's no color query.
   // Undefined when there's a blank color query,
   // which happens when someone clears the field.
-  const colorString = colorSearchParam === null ? pickRandom(colorStringDefaults) : colorSearchParam;
+  const colorString = typeof queryParams.color === "undefined"
+    ? pickRandom(colorStringDefaults) 
+    : queryParams.color;
   
   let color;
   try {
     color = new Color(colorString);
   } catch {
     try {
+      console.log("try2", colorString)
       new Color("#" + colorString);
-      setSearchParams({ color: "#" + colorString });
-    } catch {}
+      setQueryParams({ 
+        color: "#" + colorString
+      })
+    } catch {
+      console.log("catch", colorString)
+    }
   }
 
   const shade = color ? 
@@ -46,15 +52,20 @@ const App = () => {
       calcShade(color.contrastWCAG21(black))
     ) : "?";
 
-  const { setLightness } = createInterpolants(color);
-
   const shadeTargets = uniq([10, 25, 50, 75, 100, 125, 150, 175, shade]).sort((a, b) => a - b);
   const contrastTargets = shadeTargets.map(shade => shadeToContrast(shade));
-  const shades = suggestShades({
-    manipulation: change => setLightness(change),
-    targets: contrastTargets
-  }).map(shade => shade.to("srgb"));
-
+  const shades = color 
+    ? suggestShades({
+        manipulation: change => createInterpolants(
+          color,
+          queryParams.hStart,
+          queryParams.hEnd,
+          queryParams.sStart,
+          queryParams.sEnd,
+        ).setLightness(change),
+        targets: contrastTargets
+      }).map(shade => shade.to("srgb"))
+    : [];
     
   return (
     <div className="App">
@@ -77,12 +88,16 @@ const App = () => {
                     name="color-input"
                     type="text" 
                     value={colorString}
-                    onChange={e => setSearchParams({ color: e.target.value })} 
+                    onChange={e => setQueryParams({ 
+                      color: e.target.value 
+                    })} 
                   />
                   <ColorPicker 
                     aria-label="Edit color"
                     value={colorString} 
-                    onChange={e => setSearchParams({ color: e.target.value })}
+                    onChange={e => setQueryParams({ 
+                      color: e.target.value 
+                    })} 
                     bg={colorString} 
                   />
                 </div>
@@ -106,6 +121,7 @@ const App = () => {
         </Box>
       </Header>
 
+    { color && 
       <Section>
         <Box bg={"#161616"}>
           <Box.Column>
@@ -141,20 +157,21 @@ const App = () => {
                 </Tabs.List>
                 <Tabs.ContentWrapper>
                   <Tabs.Content className="TabsContent" value="hue" >
-                    <IntForm colorProperty={"hue"} color={color} />
+                    <ColorCoordForm coordType={"hue"} color={color} />
                   </Tabs.Content>
                   <Tabs.Content className="TabsContent" value="saturation" >
-                    <IntForm colorProperty={"saturation"} color={color} />
+                    <ColorCoordForm coordType={"saturation"} color={color} />
                   </Tabs.Content>
                 </Tabs.ContentWrapper>
               </Tabs.Root>
 
             </PaletteAndTabs>
 
-            <Box.Cell></Box.Cell>
+            {/* <Box.Cell></Box.Cell> */}
           </Box.Column>
         </Box>
       </Section>
+    }
     </div>
   );
 }
@@ -177,11 +194,10 @@ const colorStringDefaults = [
 
 const Section = styled.section`
   ${({bg}) => bg ? cssTheme(bg) : ""}
-  padding-block: 8px;
+  padding-block: 12px;
   padding-inline: 24px;
   margin: auto;
   max-width: 864px;
-  align-items: center;
 
   &:first-child { padding-block-start: 24px; }
   &:last-child { padding-block-end: 24px; }
@@ -195,6 +211,9 @@ const Section = styled.section`
   }
 `
 const Header = styled(Section)`
+  display: flex;
+  align-items: center;
+  & > * { width: 100%; }
   @media (min-width: 768px) {
     min-height: calc(100vh - 2.5rem);
   }
@@ -202,7 +221,7 @@ const Header = styled(Section)`
 const PaletteAndTabs = styled(Box.Row)`
   display: grid;
   grid-template-columns: 3fr 2fr;
-  min-height: 72vh;
+  min-height: 77vh;
   @media (min-width: 768px) {
     grid-template-columns: 3fr 1fr;
   }
