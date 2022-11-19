@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import cssTheme from '../utils/makeTheme';
+import suggestTextColor from "../utils/suggestTextColor";
 
 const Palette = styled.div`
     display: grid;
@@ -7,8 +7,12 @@ const Palette = styled.div`
     grid-auto-rows: minmax(min-content, 1fr);
 `;
 
-Palette.Shade = styled.div`
-    ${({bg}) => bg ? cssTheme(bg) : ""}
+Palette.Shade = styled.div.attrs(props => ({
+    style: {
+        background: props.bg,
+        color: suggestTextColor(props.bg)
+    }
+}))`
     display: grid;
     grid-auto-flow: column;
     grid-auto-columns: auto;
