@@ -143,7 +143,7 @@ const App = () => {
                 ))}
               </Palette>
 
-              <Tabs.Root className="TabsRoot" defaultValue="hue">
+              <Tabs.Root className="TabsRoot" defaultValue="saturation">
                 <Tabs.List className="TabsList" aria-label="Edit palette">
                   <Tabs.Trigger className="TabsTrigger" value="hue">
                     Hue

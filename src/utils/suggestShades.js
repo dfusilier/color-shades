@@ -39,8 +39,8 @@ const shadeFromContrast = ({
   }
 
   return finalTargets.map(target => {
-    if(target === 1) { return Color("black"); }
-    if(target === 21) { return Color("white"); }
+    if(target === 1) { return new Color("black"); }
+    if(target === 21) { return new Color("white"); }
     return suggestColor({
       manipulation,
       predicate,
