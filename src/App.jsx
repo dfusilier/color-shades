@@ -14,7 +14,6 @@ import { uniq, sample } from 'lodash';
 // Components
 import GlobalStyles from './GlobalStyles';
 import Box from './components/Box';
-// import FormGroup from './components/FormGroup';
 import TextField from './components/TextField';
 import ColorPicker from './components/ColorPicker'; 
 import Palette from './components/Palette';
@@ -27,8 +26,8 @@ const App = () => {
   // Undefined is returned when there's no color query.
   // Null when there's a blank color query,
   // which happens when someone clears the field.
-  let color = queryParams.color === "undefined"
-    ? queryParams.color = sample(colorDefaults)
+  let color = typeof queryParams.color === "undefined"
+    ? sample(colorDefaults)
     : queryParams.color;
 
   let colorObj;
@@ -50,17 +49,22 @@ const App = () => {
   ) : "?";
   
   const shades = uniq([10, 25, 50, 75, 100, 125, 150, 175, shade]).sort((a, b) => a - b);
-  const { setLightness } = createInterpolants(
-    colorObj,
-    queryParams.hStart,
-    queryParams.hEnd,
-    queryParams.sStart,
-    queryParams.sEnd,
-  );
-  const shadeColors = suggestShades({
-    manipulation: change => setLightness(change),
-    targets: shades.map(shade => shadeToContrast(shade))
-  }).map(shade => shade.to("srgb"));
+  
+  let shadeColors;
+
+  if (colorObj) {
+    const { setLightness } = createInterpolants(
+      colorObj,
+      queryParams.hStart,
+      queryParams.hEnd,
+      queryParams.sStart,
+      queryParams.sEnd,
+    );
+    shadeColors = suggestShades({
+      manipulation: change => setLightness(change),
+      targets: shades.map(shade => shadeToContrast(shade))
+    }).map(shade => shade.to("srgb"));
+  }
 
   return (
     <div className="App">
@@ -82,16 +86,16 @@ const App = () => {
                     id="color-input" 
                     name="color-input"
                     type="text" 
-                    value={queryParams.color}
+                    value={color}
                     onChange={e => setQueryParams({ 
                       color: e.target.value 
                     })} 
                   />
                   <ColorPicker 
                     aria-label="Edit color"
-                    value={queryParams.color} 
+                    value={colorObj ? color : "#000000"} 
                     onChange={e => setQueryParams({ color: e.target.value })}
-                    bg={queryParams.color} 
+                    bg={colorObj ? color : "#000000"} 
                   />
                 </div>
               </fieldset>
@@ -114,7 +118,7 @@ const App = () => {
         </Box>
       </Header>
 
-    { color && 
+    { shadeColors && 
       <Section>
         <Box bg={"#161616"}>
           <Box.Column>
