@@ -17,7 +17,6 @@ const GlobalStyles = createGlobalStyle`
         --color-fg-subdued: rgba(255, 255, 255, 0.75);
         --color-fg-subdued-non-text: rgba(255, 255, 255, 0.5);
         --color-fg-subdued-decorative: rgba(255, 255, 255, 0.04);
-        ${({bg}) => bg ? cssTheme(bg) : ""}
 
         --font-size-00: 0.75rem;
         --line-height-00: 1.5;

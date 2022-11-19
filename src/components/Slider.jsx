@@ -1,5 +1,4 @@
 import styled from "styled-components";
-// import cssTheme from "../utils/makeTheme";
 import * as RadixSlider from '@radix-ui/react-slider';
 
 const Slider = { ...RadixSlider };

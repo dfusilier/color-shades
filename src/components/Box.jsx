@@ -2,7 +2,8 @@ import styled from "styled-components";
 import cssTheme from '../utils/makeTheme';
 
 const Box = styled.div`
-  ${({bg}) => bg ? cssTheme(bg) : ""}
+  background: var(--color-bg);
+  color: var(--color-fg);
 
   --box-padding-block: 20px;
   --box-padding-inline: 24px;

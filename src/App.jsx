@@ -53,6 +53,7 @@ const App = () => {
   let shadeColors;
 
   if (colorObj) {
+    document.body.style.backgroundColor = color;
     const { setLightness } = createInterpolants(
       colorObj,
       queryParams.hStart,

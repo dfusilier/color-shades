@@ -59,7 +59,7 @@ Tabs.Trigger = styled(RadixTabs.Trigger)`
   width: 100%;
 
   &[data-state="active"] {
-    ${props => cssTheme("white")}
+    ${cssTheme("white")}
     background: var(--color-bg);
     border: 1px solid var(--color-bg);
   }
