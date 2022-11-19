@@ -1,4 +1,5 @@
 import { useSearchParams } from 'react-router-dom';
+import { throttle } from 'lodash';
 
 const useQueryParams = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -6,7 +7,9 @@ const useQueryParams = () => {
     searchParams.entries()
   );
 
-  return [searchParamsAsObject, setSearchParams];
+  return [searchParamsAsObject, throttle(
+    setSearchParams, 10, { trailing: true, leading: false }
+  )];
 };
 
 export default useQueryParams;

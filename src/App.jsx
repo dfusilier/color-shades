@@ -4,13 +4,12 @@ import Color from 'colorjs.io';
 
 // Utils
 import useQueryParams from './utils/useQueryParams';
-import calcShade from './utils/shadeFromContrast';
+import shadeFromContrast from './utils/shadeFromContrast';
 import cssTheme from './utils/makeTheme';
-import pickRandom from './utils/pickRandom';
 import suggestShades from './utils/suggestShades';
 import createInterpolants from './utils/createInterpolants';
 import shadeToContrast from './utils/shadeToContrast';
-import { uniq } from 'lodash';
+import { uniq, sample } from 'lodash';
 
 // Components
 import GlobalStyles from './GlobalStyles';
@@ -25,51 +24,47 @@ import ColorCoordForm from './ColorCoordForm';
 const App = () => {
   let [queryParams, setQueryParams] = useQueryParams();
 
-  // Null is returned when there's no color query.
-  // Undefined when there's a blank color query,
+  // Undefined is returned when there's no color query.
+  // Null when there's a blank color query,
   // which happens when someone clears the field.
-  const colorString = typeof queryParams.color === "undefined"
-    ? pickRandom(colorStringDefaults) 
+  let color = queryParams.color === "undefined"
+    ? queryParams.color = sample(colorDefaults)
     : queryParams.color;
-  
-  let color;
+
+  let colorObj;
   try {
-    color = new Color(colorString);
+    colorObj = new Color(color);
   } catch {
     try {
-      console.log("try2", colorString)
-      new Color("#" + colorString);
+      new Color("#" + color);
       setQueryParams({ 
-        color: "#" + colorString
-      })
+        color: "#" + color
+      });
     } catch {
-      console.log("catch", colorString)
+      console.log("catch", color);
     }
   }
 
-  const shade = color ? 
-    Math.round(
-      calcShade(color.contrastWCAG21(black))
-    ) : "?";
+  const shade = colorObj ? Math.round(
+    shadeFromContrast(colorObj.contrastWCAG21(black))
+  ) : "?";
+  
+  const shades = uniq([10, 25, 50, 75, 100, 125, 150, 175, shade]).sort((a, b) => a - b);
+  const { setLightness } = createInterpolants(
+    colorObj,
+    queryParams.hStart,
+    queryParams.hEnd,
+    queryParams.sStart,
+    queryParams.sEnd,
+  );
+  const shadeColors = suggestShades({
+    manipulation: change => setLightness(change),
+    targets: shades.map(shade => shadeToContrast(shade))
+  }).map(shade => shade.to("srgb"));
 
-  const shadeTargets = uniq([10, 25, 50, 75, 100, 125, 150, 175, shade]).sort((a, b) => a - b);
-  const contrastTargets = shadeTargets.map(shade => shadeToContrast(shade));
-  const shades = color 
-    ? suggestShades({
-        manipulation: change => createInterpolants(
-          color,
-          queryParams.hStart,
-          queryParams.hEnd,
-          queryParams.sStart,
-          queryParams.sEnd,
-        ).setLightness(change),
-        targets: contrastTargets
-      }).map(shade => shade.to("srgb"))
-    : [];
-    
   return (
     <div className="App">
-      <GlobalStyles bg={color ? colorString : undefined} />
+      <GlobalStyles bg={colorObj ? color : undefined} />
       <Header>
         <Box bg={"#161616"}>
           <Box.Column>
@@ -87,18 +82,16 @@ const App = () => {
                     id="color-input" 
                     name="color-input"
                     type="text" 
-                    value={colorString}
+                    value={queryParams.color}
                     onChange={e => setQueryParams({ 
                       color: e.target.value 
                     })} 
                   />
                   <ColorPicker 
                     aria-label="Edit color"
-                    value={colorString} 
-                    onChange={e => setQueryParams({ 
-                      color: e.target.value 
-                    })} 
-                    bg={colorString} 
+                    value={queryParams.color} 
+                    onChange={e => setQueryParams({ color: e.target.value })}
+                    bg={queryParams.color} 
                   />
                 </div>
               </fieldset>
@@ -133,12 +126,12 @@ const App = () => {
 
             <PaletteAndTabs>
               <Palette>
-                {shades.map((shadeColor, i) => (
+                {shadeColors.map((shadeColor, i) => (
                   <Palette.Shade bg={shadeColor.toString({ format: "hex" })} key={i}>
                     <div>
-                      {shadeTargets[i] === shade 
-                        ? `${shadeTargets[i]} ★`
-                        : shadeTargets[i]
+                      {shades[i] === shade 
+                        ? `${shades[i]} ★`
+                        : shades[i]
                       }
                     </div>
                     <div>{shadeColor.toString({ format: "hex" })}</div>
@@ -157,10 +150,10 @@ const App = () => {
                 </Tabs.List>
                 <Tabs.ContentWrapper>
                   <Tabs.Content className="TabsContent" value="hue" >
-                    <ColorCoordForm coordType={"hue"} color={color} />
+                    <ColorCoordForm coordType={"hue"} color={colorObj} />
                   </Tabs.Content>
                   <Tabs.Content className="TabsContent" value="saturation" >
-                    <ColorCoordForm coordType={"saturation"} color={color} />
+                    <ColorCoordForm coordType={"saturation"} color={colorObj} />
                   </Tabs.Content>
                 </Tabs.ContentWrapper>
               </Tabs.Root>
@@ -179,7 +172,7 @@ const App = () => {
 export default App;
 
 const black = new Color("black");
-const colorStringDefaults = [
+const colorDefaults = [
   "#2E8B57", // seagreen
   "#708090", // slategray
   "#FF6347", // tomato

@@ -4,6 +4,8 @@ import { createInterpolant } from "./createInterpolant";
 const createInterpolants = (color, hStart, hEnd, sStart, sEnd) => {
   color = color.to("hsl");
 
+  console.log(color)
+
   const [hBase, sBase, lBase] = color.coords;
 
   // Note that "== null" will return true for both undefined and null.
