@@ -8,7 +8,7 @@ const useQueryParams = () => {
   );
 
   return [searchParamsAsObject, throttle(
-    setSearchParams, 50, { trailing: true, leading: false }
+    setSearchParams, 100, { trailing: true, leading: false }
   )];
 };
 

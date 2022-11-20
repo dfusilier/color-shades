@@ -32,8 +32,13 @@ Slider.Thumb = styled(RadixSlider.Thumb)`
   display: block;
   width: 25px;
   height: 25px;
-  // box-shadow: 0 2px 10px var(--blackA7);
   border-radius: 9999px;
+  transition: outline 0.075s ease-out; 
+
+  &:focus {
+    outline: 3px solid var(--color-fg);
+    transition: outline 0.1s ease-out; 
+  }
 `
 
 export default Slider;

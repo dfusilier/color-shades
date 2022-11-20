@@ -57,11 +57,23 @@ Tabs.Trigger = styled(RadixTabs.Trigger)`
   padding: 0px 8px;
   flex: 1 1 minmax(min-content, 1fr);
   width: 100%;
+  transition: outline 0.075s ease-out, border-radius0.1s ease-out;
+  outline: 0;
+  margin: 0;
+  display: block;
+  cursor: pointer;
+  appearance: none;
 
   &[data-state="active"] {
     ${cssTheme("white")}
     background: var(--color-bg);
     border: 1px solid var(--color-bg);
+  }
+
+  &:focus {
+    outline: 3px solid var(--color-bg);
+    border-radius: 4px;
+    transition: outline 0.1s ease-out, border-radius0.1s ease-out; 
   }
 `;
 
