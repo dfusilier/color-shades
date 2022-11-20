@@ -20,9 +20,4 @@ const TextField = styled.input.attrs(props => ({
     }
 `
 
-const SecretTextField = styled(TextField)`
-
-`
-
-
 export default TextField;

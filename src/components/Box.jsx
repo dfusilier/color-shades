@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import cssTheme from '../utils/makeTheme';
 
 const Box = styled.div`
   background: var(--color-bg);
