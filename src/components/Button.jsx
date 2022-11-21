@@ -13,6 +13,7 @@ const Button = styled.button.attrs(props => ({
   border-radius: 1.5rem;
   transition: outline 0.075s ease-out;
   position: relative;
+  cursor: pointer;
 
   white-space: ${props => props.noWrap ? "nowrap" : "normal "};
 

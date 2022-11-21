@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from "styled-components";
-// import Color from 'colorjs.io';
+import Color from 'colorjs.io';
 
 // Utils
 import useQueryParams from './utils/useQueryParams';
@@ -59,7 +59,14 @@ const MoreShadesSection = ({ colorObj, shade }) => {
                   </Dialog.Trigger>
                   
                   <Dialog.Portal>
-                    <Dialog.Overlay />
+                    <Dialog.Overlay 
+                      bg={new Color(
+                        "srgb",
+                        getShadeColors([10])[0].coords,
+                        0.96
+                      ).to("srgb").toString() 
+                        
+                    } />
                     <Dialog.Content>
                       <EditShadesDialog 
                         shade={shade}

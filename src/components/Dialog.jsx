@@ -4,8 +4,11 @@ import Button from "./Button";
 
 const Dialog = { ...RadixDialog };
 
-Dialog.Overlay = styled(Dialog.Overlay)`
-  background: rgba(10, 10, 10, 0.9);
+Dialog.Overlay = styled(Dialog.Overlay).attrs(props => ({
+  style: {
+    background: props.bg || "rgba(10, 10, 10, 0.9)"
+  }
+}))`
   position: fixed;
   z-index: 1000;
   inset: 0;

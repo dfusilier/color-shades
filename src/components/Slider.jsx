@@ -34,6 +34,7 @@ Slider.Thumb = styled(RadixSlider.Thumb)`
   height: 25px;
   border-radius: 9999px;
   transition: outline 0.075s ease-out; 
+  cursor: pointer;
 
   &:focus {
     outline: 3px solid var(--color-fg);
