@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import * as RadixDialog from '@radix-ui/react-dialog';
 import Button from "./Button";
+import Box from "./Box";
 
 const Dialog = { ...RadixDialog };
 
@@ -75,6 +76,16 @@ Dialog.ConfirmingAction = styled(Button).attrs(props => ({
 }))`
   padding-inline: var(--box-padding-inline);
   border-radius: 0;
+`
+Dialog.Header = styled(Box.Cell)`
+  --box-padding-block: 1rem;
+`
+Dialog.Body = styled(Box.Cell)`
+  --box-padding-block: 2rem;
+  display: grid;
+  grid-template-rows: auto auto;
+  gap: 2rem;
+  padding-block-end: calc(var(--box-padding-block) + 0.25rem);
 `
 
 export default Dialog;

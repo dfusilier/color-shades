@@ -12,11 +12,11 @@ const TextField = styled.input.attrs(props => ({
     font-size: inherit;
     line-height: inherit;
     width: 100%;
-    transition: outline 0.075s ease-out; 
-
+    transition: box-shadow 0.075s ease-out;
     &:focus {
-        outline: 3px solid var(--color-fg);
-        transition: outline 0.1s ease-out; 
+        outline: none; 
+        box-shadow: 0 0 0 3px var(--color-fg);
+        transition: box-shadow 0.1s ease-out; 
     }
 `
 

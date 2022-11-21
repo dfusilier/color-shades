@@ -21,12 +21,12 @@ const EditShadesDialog = ({ shade, shades, getShadeColors, onSave }) => {
   return (
     <Box>
       <Box.Column>
-        <Box.Cell>
+        <Dialog.Header>
           <Dialog.Title>
             <div className="type-size-3">Edit shades</div>
           </Dialog.Title>
-        </Box.Cell>
-        <ContentBox>
+        </Dialog.Header>
+        <Dialog.Body>
           <ChipGroup>
             {newShades.map((thisShade, i) => 
               <Chip 
@@ -64,7 +64,7 @@ const EditShadesDialog = ({ shade, shades, getShadeColors, onSave }) => {
               Add shade
             </Button>
           </div>
-        </ContentBox>
+        </Dialog.Body>
         <Dialog.Footer>
           <Dialog.Close asChild>
             <Dialog.DismissingAction prominence="secondary" size="large">Cancel</Dialog.DismissingAction>
@@ -77,21 +77,6 @@ const EditShadesDialog = ({ shade, shades, getShadeColors, onSave }) => {
     </Box>
   );
 }
-
-// const ChipsAndForm = styled.div`
-//   display: grid;
-//   grid-template-columns: 5fr 3fr;
-//   gap: 1rem;
-// `
-
-const ContentBox = styled(Box.Cell)`
-  --box-padding-block: 2rem;
-  display: grid;
-  grid-template-rows: auto auto;
-  gap: 2rem;
-  padding-block-end: calc(var(--box-padding-block) + 0.25rem);
-
-`
 
 const ChipButton = styled.button`
   display: flex;
