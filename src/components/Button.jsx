@@ -18,20 +18,27 @@ const Button = styled.button.attrs(props => ({
   white-space: ${props => props.noWrap ? "nowrap" : "normal "};
 
   &:focus { outline: 0; }
+  transition: box-shadow 0.075s ease-out;
+  &:after {
+    transition: box-shadow 0.075s ease-out;
+  }
 
   ${props => props.focusType === "interior" ? `
     &:focus-visible::after {
       content: "";
       position: absolute;
-      top: 8px;
-      bottom: 8px;
-      left: 8px;
-      right: 8px;
-      outline: 5px solid currentColor;
+      top: 9px;
+      bottom: 9px;
+      left: 9px;
+      right: 9px;
+      border-radius: 1px;
+      box-shadow: 0 0 0 3px currentColor;
+      transition: box-shadow 0.1s ease-out; 
     }
   ` : `
     &:focus-visible {
-      outline: 5px solid currentColor;
+      box-shadow: 0 0 0 5px currentColor;
+      transition: box-shadow 0.1s ease-out; 
     }
   `
 }

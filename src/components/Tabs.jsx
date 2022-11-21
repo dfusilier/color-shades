@@ -72,14 +72,14 @@ Tabs.Trigger = styled(RadixTabs.Trigger)`
     z-index: 5;
   }
 
+  transition: box-shadow 0.075s ease-out, border-radius 0.075s ease-out;
   &:focus {
     outline: none;
   }
-
   &:focus-visible {
-    outline: 5px solid var(--color-bg);
-    border-radius: 4px;
-    transition: outline 0.1s ease-out, border-radius0.1s ease-out; 
+    box-shadow: 0 0 0 5px var(--color-bg);
+    transition: box-shadow 0.1s ease-out, border-radius 0.1s ease-out; 
+    border-radius: 1px;
   }
 `;
 

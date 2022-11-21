@@ -61,14 +61,14 @@ const ColorCoordForm = ({ color, coordType }) => {
           onChange={value => 
             setQueryParams({
               ...queryParams,
-              [startKey]: value,
-              color: baseColorHex
+              color: baseColorHex,
+              [startKey]: value
             })
           }
         />
       </CustomBoxCell>
 
-      <CustomBoxCell className="flex-column flex-justify-center flex-fill-y">
+      {/* <CustomBoxCell className="flex-column flex-justify-center flex-fill-y">
         <Input
           id={`${coordType}-base-input`}
           coordType={coordType}
@@ -83,7 +83,7 @@ const ColorCoordForm = ({ color, coordType }) => {
               .to("srgb").toString({ format: "hex" })
           })}
         />
-      </CustomBoxCell>
+      </CustomBoxCell> */}
 
       <CustomBoxCell className="flex-column flex-justify-center flex-fill-y">
         <Input
@@ -95,8 +95,8 @@ const ColorCoordForm = ({ color, coordType }) => {
           onChange={value => 
             setQueryParams({
               ...queryParams,
-              [endKey]: value,
-              color: baseColorHex
+              color: baseColorHex,
+              [endKey]: value
             })
           }
         />

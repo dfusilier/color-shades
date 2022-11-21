@@ -24,7 +24,7 @@ const MoreShadesSection = ({ colorObj, shade }) => {
   let [queryParams, setQueryParams] = useQueryParams();
 
   const shades = queryParams.shades 
-    ? queryParams.shades.split('-')
+    ? queryParams.shades.split('-').map(thisShade => parseInt(thisShade))
     : uniq([10, 25, 50, 75, 100, 125, 150, 175, shade]).sort((a, b) => a - b);
   
   const { setLightness } = createInterpolants(
@@ -50,8 +50,8 @@ const MoreShadesSection = ({ colorObj, shade }) => {
         <Box.Column>
 
           <Box.Cell className="flex-column gap-0">
-            <div className="flex-row flex-gap-1">
-              <h2 className="type-size-4 flex-fill-x flex-align-center">More shades</h2>
+            <div className="flex-row flex-gap-1 flex-align-center">
+              <h2 className="type-size-4 flex-fill-x">More shades</h2>
               <div className="flex-fit-x flex-row gap-00">
                 <Dialog.Root>
                   <Dialog.Trigger asChild>
@@ -74,6 +74,7 @@ const MoreShadesSection = ({ colorObj, shade }) => {
                         getShadeColors={getShadeColors}
                         onSave={shades => setQueryParams({
                           ...queryParams,
+                          color: colorObj.toString({ format: "hex" }),
                           shades: shades.join("-")
                         })}
                       />
@@ -87,15 +88,15 @@ const MoreShadesSection = ({ colorObj, shade }) => {
 
           <PaletteAndTabs>
             <Palette>
-              {shadeColors.map((shadeColor, i) => (
-                <Palette.Shade bg={shadeColor.toString({ format: "hex" })} key={i}>
+              {shades.map((thisShade, i) => (
+                <Palette.Shade bg={shadeColors[i].toString({ format: "hex" })} key={i}>
                   <div>
-                    {shades[i] === shade 
+                    {thisShade === shade
                       ? `${shades[i]} ★`
                       : shades[i]
                     }
                   </div>
-                  <div>{shadeColor.toString({ format: "hex" })}</div>
+                  <div>{shadeColors[i].toString({ format: "hex" })}</div>
                 </Palette.Shade>
               ))}
             </Palette>

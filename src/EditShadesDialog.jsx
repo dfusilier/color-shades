@@ -58,7 +58,7 @@ const EditShadesDialog = ({ shade, shades, getShadeColors, onSave }) => {
               step={1}
             />
             <Button prominence="secondary" size="medium" noWrap onClick={e => {
-              newShade && setNewShades(uniq([ ...newShades, newShade ]).sort((a, b) => a - b))
+              newShade && setNewShades(uniq([ ...newShades, parseInt(newShade) ]).sort((a, b) => a - b))
               setNewShade("")
             }}>
               Add shade

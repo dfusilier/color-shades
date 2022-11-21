@@ -69,8 +69,7 @@ const App = () => {
                     type="text" 
                     value={color}
                     onChange={e => setQueryParams({ 
-                      color: e.target.value,
-                      shades: [40, 20, 32]
+                      color: e.target.value
                     })} 
                   />
                   <ColorPicker 
