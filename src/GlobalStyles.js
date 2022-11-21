@@ -3,6 +3,17 @@ import { createGlobalStyle } from 'styled-components';
 const GlobalStyles = createGlobalStyle`
     * {
         box-sizing: border-box;
+        &::selection {
+            background: rgba(255, 255, 255, 0.25);
+        }
+    }
+
+    button, 
+    legend,
+    fieldset, 
+    p, h1, h2, h3, h4, h5, h6, ul, ol {
+        all: unset;
+        box-sizing: border-box;
     }
 
     html {
@@ -55,6 +66,8 @@ const GlobalStyles = createGlobalStyle`
         }
     }
 
+    
+
     .type-size-00 {
         font-size: var(--font-size-00);
         line-height: var(--line-height-00);
@@ -103,18 +116,19 @@ const GlobalStyles = createGlobalStyle`
         font-variant-numeric: tabular-nums;
     }
 
-    p, h1, h2, h3, h4, h5, h6, ul, ol, li {
-        margin: 0;
-        font-size: inherit;
-        font-weight: inherit;
-        line-height: inherit;
-    }
-
-    ul, ol {
+    .list-bulleted {
         display: flex;
         flex-direction: column;
         gap: 0.25rem;
-        padding-inline-start: 1.25rem;
+        padding-inline-start: 0.5rem;
+        list-style: disc inside none;
+        & > li {
+            list-style: inherit;
+        }
+    }
+
+    fieldset {
+        width: 100%;
     }
 
     .stack-000 > * + * {
@@ -185,11 +199,15 @@ const GlobalStyles = createGlobalStyle`
 
     .flex-fit-y {
         height: auto;
-        flex: 0 0 auto;
+        flex: 1 0 auto;
     }
     .flex-fit-x {
         width: auto;
-        flex: 0 0 auto;
+        flex: 1 0 auto;
+    }
+    .flex-shrink-x {
+        width: auto;
+        flex: 0 1 auto;
     }
     .flex-fill-x {
         flex: 1 1 100%;
@@ -198,27 +216,19 @@ const GlobalStyles = createGlobalStyle`
         flex: 1 1 100%;
     }
 
-    .grid-columns {
+    .grid-column {
         display: grid;
         grid-auto-flow: row;
         grid-auto-rows: minmax(min-content, 1fr);
     }
-    .grid-rows {
+    .grid-row {
         display: grid;
         grid-auto-flow: column;
         grid-auto-columns: minmax(min-content, 1fr);
     }
 
-    legend {
-        padding: 0;
-        display: table;
-    }
-    fieldset {
-        border: 0;
-        padding: 0.01em 0 0 0;
-        margin: 0;
-        min-width: 0;
-    }
+
+
     body:not(:-moz-handler-blocked) fieldset {
         display: table-cell;
     }

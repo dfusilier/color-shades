@@ -6,6 +6,7 @@ const Tabs = { ...RadixTabs };
 
 Tabs.Root = styled(RadixTabs.Root)`
   display: grid;
+  position: relative;
   width: 100%;
   grid-template-rows: auto 1fr;
 `
@@ -68,10 +69,15 @@ Tabs.Trigger = styled(RadixTabs.Trigger)`
     ${cssTheme("white")}
     background: var(--color-bg);
     border: 1px solid var(--color-bg);
+    z-index: 5;
   }
 
   &:focus {
-    outline: 3px solid var(--color-bg);
+    outline: none;
+  }
+
+  &:focus-visible {
+    outline: 5px solid var(--color-bg);
     border-radius: 4px;
     transition: outline 0.1s ease-out, border-radius0.1s ease-out; 
   }
