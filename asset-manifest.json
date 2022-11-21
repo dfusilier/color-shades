@@ -1,10 +1,10 @@
 {
   "files": {
-    "main.js": "/color-shades/static/js/main.ac9196d7.js",
+    "main.js": "/color-shades/static/js/main.624c80f9.js",
     "index.html": "/color-shades/index.html",
-    "main.ac9196d7.js.map": "/color-shades/static/js/main.ac9196d7.js.map"
+    "main.624c80f9.js.map": "/color-shades/static/js/main.624c80f9.js.map"
   },
   "entrypoints": [
-    "static/js/main.ac9196d7.js"
+    "static/js/main.624c80f9.js"
   ]
 }
