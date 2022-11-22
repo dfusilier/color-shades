@@ -7,16 +7,6 @@ const GlobalStyles = createGlobalStyle`
             background: rgba(255, 255, 255, 0.25);
         }
     }
-
-    button, 
-    input,
-    legend,
-    fieldset, 
-    p, h1, h2, h3, h4, h5, h6, ul, ol {
-        all: unset;
-        box-sizing: border-box;
-    }
-
     html {
         font-size: 100%;
     }
@@ -67,8 +57,6 @@ const GlobalStyles = createGlobalStyle`
         }
     }
 
-    
-
     .type-size-00 {
         font-size: var(--font-size-00);
         line-height: var(--line-height-00);
@@ -116,22 +104,6 @@ const GlobalStyles = createGlobalStyle`
     .font-variant-tabular {
         font-variant-numeric: tabular-nums;
     }
-
-    .list-bulleted {
-        display: flex;
-        flex-direction: column;
-        gap: 0.25rem;
-        padding-inline-start: 0.5rem;
-        list-style: disc inside none;
-        & > li {
-            list-style: inherit;
-        }
-    }
-
-    fieldset {
-        width: 100%;
-    }
-
     .stack-000 > * + * {
         margin-block-start: 0.5rem;
     }
@@ -192,6 +164,26 @@ const GlobalStyles = createGlobalStyle`
     .gap-5      { gap: 3rem; }
     .gap-6      { gap: 4rem; }
 
+    .h-000  { height: 0.5rem; }
+    .h-00   { height: 0.75rem; }
+    .h-0    { height: 1rem; }
+    .h-1    { height: 1.25rem; }
+    .h-2    { height: 1.5rem; }
+    .h-3    { height: 1.75rem; }
+    .h-4    { height: 2rem; }
+    .h-5    { height: 3rem; }
+    .h-6    { height: 4rem; }
+
+    .w-000  { width: 0.5rem; }
+    .w-00   { width: 0.75rem; }
+    .w-0    { width: 1rem; }
+    .w-1    { width: 1.25rem; }
+    .w-2    { width: 1.5rem; }
+    .w-3    { width: 1.75rem; }
+    .w-4    { width: 2rem; }
+    .w-5    { width: 3rem; }
+    .w-6    { width: 4rem; }
+
     .flex-shrink { flex-shrink: 1; }
     .flex-no-shrink { flex-shrink: 0; }
     .flex-grow { flex-grow: 1; }
@@ -228,13 +220,27 @@ const GlobalStyles = createGlobalStyle`
         grid-auto-columns: minmax(min-content, 1fr);
     }
 
-
-
-    body:not(:-moz-handler-blocked) fieldset {
-        display: table-cell;
+    button, 
+    input,
+    legend,
+    fieldset, 
+    p, h1, h2, h3, h4, h5, h6, ul, ol {
+        all: unset;
+        box-sizing: border-box;
     }
 
+    .list-bulleted {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+        list-style: disc outline none;
+        padding-inline-start: 1rem;
+    }
+    
 
+    fieldset {
+        width: 100%;
+    }
 `
 
 export default GlobalStyles;

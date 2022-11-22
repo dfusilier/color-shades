@@ -48,7 +48,7 @@ const ColorCoordForm = ({ color, coordType }) => {
 
   const baseColorHex = color.to("srgb").toString({ format: "hex"});
   
-  let startTrackBackground, endTrackBackground;
+  let startTrackBackground, baseTrackBackground, endTrackBackground;
   
   if(coordType === "saturation") {
     
@@ -56,12 +56,17 @@ const ColorCoordForm = ({ color, coordType }) => {
       new Color("hsl", [ queryParams.hStart || coords[0] || 0, 0, 50 ]),
       new Color("hsl", [ queryParams.hStart || coords[0] || 0, 100, 50 ])
     );
+    baseTrackBackground = makeCssGradient(
+      new Color("hsl", [ coords[0] || 0, 0, 50 ]),
+      new Color("hsl", [ coords[0] || 0, 100, 50 ])
+    );
     endTrackBackground = makeCssGradient(
       new Color("hsl", [ queryParams.hEnd || coords[0] || 0, 0, 50 ]),
       new Color("hsl", [ queryParams.hEnd || coords[0] || 0, 100, 50 ])
     );
   } else {
     startTrackBackground = hueTrackBackground;
+    baseTrackBackground = hueTrackBackground;
     endTrackBackground = hueTrackBackground;
   }
 
@@ -85,13 +90,13 @@ const ColorCoordForm = ({ color, coordType }) => {
         />
       </CustomBoxCell>
 
-      {/* <CustomBoxCell className="flex-column flex-justify-center flex-fill-y">
+      <CustomBoxCell className="flex-column flex-justify-center flex-fill-y">
         <Input
           id={`${coordType}-base-input`}
           coordType={coordType}
-          label="★ Key color"
+          label="★ Base color"
           value={baseValue}
-          trackBackground={trackBackground}
+          trackBackground={baseTrackBackground}
           onChange={value => setQueryParams({
             ...queryParams,
             color: color.set({ 
@@ -100,7 +105,7 @@ const ColorCoordForm = ({ color, coordType }) => {
               .to("srgb").toString({ format: "hex" })
           })}
         />
-      </CustomBoxCell> */}
+      </CustomBoxCell>
 
       <CustomBoxCell className="flex-column flex-justify-center flex-fill-y">
         <Input

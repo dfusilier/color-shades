@@ -13,13 +13,14 @@ import { uniq } from 'lodash';
 import Section from './components/Section';
 import Box from './components/Box';
 import Button from './components/Button';
-import ButtonBar from './components/ButtonBar';
+import Tooltip from './components/Tooltip';
 import Palette from './components/Palette';
 import Tabs from './components/Tabs';
 import ColorCoordForm from './ColorCoordForm';
 import Dialog from './components/Dialog';
 import EditShadesDialog from './EditShadesDialog';
-import { Pencil1Icon, CopyIcon } from '@radix-ui/react-icons'
+import { SwatchIcon, DocumentDuplicateIcon } from '@heroicons/react/24/outline';
+
 
 const MoreShadesSection = ({ colorObj, shade }) => {
   let [queryParams, setQueryParams] = useQueryParams();
@@ -53,12 +54,25 @@ const MoreShadesSection = ({ colorObj, shade }) => {
           <Box.Cell className="flex-column gap-0">
             <div className="flex-row flex-gap-1 flex-align-center">
               <h2 className="type-size-4 flex-fill-x">More shades</h2>
-              <div className="flex-fit-x flex-row gap-0">
+              <div className="flex-fit-x flex-row gap-0" style={{ marginInlineEnd: "-0.5rem"}}>
                 <Dialog.Root>
-                  <Dialog.Trigger asChild>
-                    <Button prominence="secondary" icon><Pencil1Icon /></Button>
-                  </Dialog.Trigger>
-                  
+                  <Tooltip.Provider>
+                    <Tooltip.Root>
+                      <Tooltip.Trigger asChild>
+                        <Dialog.Trigger asChild>
+                          <Button prominence="secondary" icon>
+                            <SwatchIcon className="h-2 w-2"/>
+                          </Button>
+                        </Dialog.Trigger>
+                      </Tooltip.Trigger>
+                      <Tooltip.Portal>
+                        <Tooltip.Content className="TooltipContent" sideOffset={6}>
+                          Add to library
+                          <Tooltip.Arrow className="TooltipArrow" />
+                        </Tooltip.Content>
+                      </Tooltip.Portal>
+                    </Tooltip.Root>
+                  </Tooltip.Provider>
                   <Dialog.Portal>
                     <Dialog.Overlay 
                       bg={new Color(
@@ -82,7 +96,21 @@ const MoreShadesSection = ({ colorObj, shade }) => {
                     </Dialog.Content>
                   </Dialog.Portal>
                 </Dialog.Root>
-                <Button prominence="secondary" icon><CopyIcon /></Button>
+                <Tooltip.Provider>
+                    <Tooltip.Root>
+                      <Tooltip.Trigger asChild>
+                        <Button prominence="secondary" icon>
+                          <DocumentDuplicateIcon className="h-2 w-2" />
+                        </Button>
+                      </Tooltip.Trigger>
+                    <Tooltip.Portal>
+                      <Tooltip.Content className="TooltipContent" sideOffset={6}>
+                        Copy values
+                        <Tooltip.Arrow className="TooltipArrow" />
+                      </Tooltip.Content>
+                    </Tooltip.Portal>
+                  </Tooltip.Root>
+                </Tooltip.Provider>
               </div>
             </div>
           </Box.Cell>
@@ -121,10 +149,6 @@ const MoreShadesSection = ({ colorObj, shade }) => {
             </Tabs.Root>
 
           </PaletteAndTabs>
-          {/* <ButtonBar> */}
-            {/* <Button prominence="secondary" size="large">Edit increments</Button> */}
-            {/* <Button prominence="secondary" size="large">Copy values</Button> */}
-          {/* </ButtonBar> */}
         </Box.Column>
       </Box>
     </Section>

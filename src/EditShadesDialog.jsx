@@ -11,7 +11,7 @@ import Chip from './components/Chip';
 import ChipGroup from './components/ChipGroup';
 import TextField from './components/TextField';
 import Button from './components/Button';
-import { Cross2Icon, StarFilledIcon } from '@radix-ui/react-icons'
+import { StarIcon, XMarkIcon } from '@heroicons/react/24/solid';
 
 const EditShadesDialog = ({ shade, shades, getShadeColors, onSave }) => {
   const [newShades, setNewShades] = useState(shades);
@@ -34,14 +34,15 @@ const EditShadesDialog = ({ shade, shades, getShadeColors, onSave }) => {
                 key={i}>
                   {thisShade}
                   {thisShade === shade 
-                    ? <StarFilledIcon />
+                    ? <StarIcon className="h-1 w-1" />
                     : <ChipButton 
+                        aria-label="Remove shade"
                         className="flex-row flex-align-center"
                         onClick={e => setNewShades(
                           newShades.filter(s => s !== thisShade)
                         )}
                       >
-                          <Cross2Icon />
+                          <XMarkIcon className="h-1 w-1" />
                       </ChipButton>
                   }
                   
@@ -50,6 +51,7 @@ const EditShadesDialog = ({ shade, shades, getShadeColors, onSave }) => {
           </ChipGroup>
           <div className="flex-row gap-0 flex-align-center">
             <TextField 
+              aria-label="New shade"
               type="number" 
               value={newShade}
               onChange={e => setNewShade(e.target.value)} 
