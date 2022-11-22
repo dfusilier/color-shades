@@ -10,7 +10,6 @@ Tabs.Root = styled(RadixTabs.Root)`
   width: 100%;
   grid-template-rows: auto 1fr;
 `
-
 Tabs.List = styled(RadixTabs.List)`
   // position: absolute;
   top: -1.25rem;
@@ -22,26 +21,9 @@ Tabs.List = styled(RadixTabs.List)`
   flex-direction: row;
   padding-inline: 0;
   width: 100%;
-`
-
-Tabs.Content = styled(RadixTabs.Content)`
-  // position: absolute;
-  top: 0;
-  bottom: 0;
-  right: 0;
-  left: 0;
-  display: grid;
-  grid-auto-flow: row;
-  grid-auto-rows: 1fr;
-  overflow-y: auto;
-  &[data-state="active"] {
-    z-index: 1;
-  }
-  transition: box-shadow 0.075s ease-out;
-  &:focus-visible {
-      outline: none; 
-      box-shadow: inset 0 0 0 3px var(--color-fg);
-      transition: box-shadow 0.1s ease-out; 
+  border-bottom: 1px solid var(--color-fg);
+  & > *:not(:last-child) {
+    border-right: 1px solid var(--color-fg);
   }
 `
 Tabs.Content = styled(RadixTabs.Content)`
@@ -69,7 +51,6 @@ Tabs.Trigger = styled(RadixTabs.Trigger)`
   font-size: inherit;
   line-height: inherit;
   border: 0;
-  border: 1px solid var(--color-fg);
   min-height: 2rem;
   padding: 0px 8px;
   flex: 1 1 minmax(min-content, 1fr);
