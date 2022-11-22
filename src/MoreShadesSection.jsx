@@ -13,6 +13,7 @@ import { uniq } from 'lodash';
 import Section from './components/Section';
 import Box from './components/Box';
 import Button from './components/Button';
+import ButtonBar from './components/ButtonBar';
 import Palette from './components/Palette';
 import Tabs from './components/Tabs';
 import ColorCoordForm from './ColorCoordForm';
@@ -52,7 +53,7 @@ const MoreShadesSection = ({ colorObj, shade }) => {
           <Box.Cell className="flex-column gap-0">
             <div className="flex-row flex-gap-1 flex-align-center">
               <h2 className="type-size-4 flex-fill-x">More shades</h2>
-              <div className="flex-fit-x flex-row gap-00">
+              <div className="flex-fit-x flex-row gap-0">
                 <Dialog.Root>
                   <Dialog.Trigger asChild>
                     <Button prominence="secondary" icon><Pencil1Icon /></Button>
@@ -110,17 +111,20 @@ const MoreShadesSection = ({ colorObj, shade }) => {
                   Sat
                 </Tabs.Trigger>
               </Tabs.List>
-              <Tabs.ContentWrapper>
+
                 <Tabs.Content className="TabsContent" value="hue" >
                   <ColorCoordForm coordType={"hue"} color={colorObj} />
                 </Tabs.Content>
                 <Tabs.Content className="TabsContent" value="saturation" >
                   <ColorCoordForm coordType={"saturation"} color={colorObj} />
                 </Tabs.Content>
-              </Tabs.ContentWrapper>
             </Tabs.Root>
 
           </PaletteAndTabs>
+          {/* <ButtonBar> */}
+            {/* <Button prominence="secondary" size="large">Edit increments</Button> */}
+            {/* <Button prominence="secondary" size="large">Copy values</Button> */}
+          {/* </ButtonBar> */}
         </Box.Column>
       </Box>
     </Section>

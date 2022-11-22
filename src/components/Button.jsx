@@ -14,6 +14,7 @@ const Button = styled.button.attrs(props => ({
   transition: outline 0.075s ease-out;
   position: relative;
   cursor: pointer;
+  gap: 0.5rem;
 
   white-space: ${props => props.noWrap ? "nowrap" : "normal "};
 

@@ -24,16 +24,8 @@ Tabs.List = styled(RadixTabs.List)`
   width: 100%;
 `
 
-Tabs.ContentWrapper = styled.div`
-  position: relative;
-  display: grid;
-  width: 100%;
-  grid-auto-flow: row;
-  grid-auto-rows: 1fr;
-`
-
 Tabs.Content = styled(RadixTabs.Content)`
-  position: absolute;
+  // position: absolute;
   top: 0;
   bottom: 0;
   right: 0;
@@ -44,6 +36,30 @@ Tabs.Content = styled(RadixTabs.Content)`
   overflow-y: auto;
   &[data-state="active"] {
     z-index: 1;
+  }
+  transition: box-shadow 0.075s ease-out;
+  &:focus-visible {
+      outline: none; 
+      box-shadow: inset 0 0 0 3px var(--color-fg);
+      transition: box-shadow 0.1s ease-out; 
+  }
+`
+Tabs.Content = styled(RadixTabs.Content)`
+  display: grid;
+  grid-auto-flow: row;
+  grid-auto-rows: 1fr;
+  overflow-y: auto;
+  &[data-state="active"] {
+    z-index: 1;
+  }
+  &[data-state='inactive'] {
+    display: none;
+  }
+  transition: box-shadow 0.075s ease-out;
+  &:focus-visible {
+      outline: none; 
+      box-shadow: inset 0 0 0 3px var(--color-fg);
+      transition: box-shadow 0.1s ease-out; 
   }
 `
 

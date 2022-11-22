@@ -29,23 +29,40 @@ const ColorCoordForm = ({ color, coordType }) => {
   const { abbrev, index } = coordVars[coordType];
   const coords = color.to("hsl").coords;
 
-  const baseValue = Math.round(coords[index]);
+  const baseValue = handleValue(coords[index], {
+    ifUndefined: 0, 
+    ifNaN: 0,
+  });
   const startKey = `${abbrev}Start`;
-  const startValue = queryParams[startKey] || baseValue;
+
+  const startValue = handleValue(queryParams[startKey], { 
+    ifUndefined: baseValue, 
+    ifNaN: 0 
+  });
+
   const endKey = `${abbrev}End`;
-  const endValue = queryParams[endKey] || baseValue;
+  const endValue = handleValue(queryParams[endKey], { 
+    ifUndefined: baseValue, 
+    ifNaN: 0 
+  });
+
   const baseColorHex = color.to("srgb").toString({ format: "hex"});
   
-  let trackBackground;
+  let startTrackBackground, endTrackBackground;
   
   if(coordType === "saturation") {
     
-    trackBackground = makeCssGradient(
-      new Color("hsl", [ coords[0], 0, coords[2] ]),
-      new Color("hsl", [ coords[0], 100, coords[2] ])
+    startTrackBackground = makeCssGradient(
+      new Color("hsl", [ queryParams.hStart || coords[0] || 0, 0, 50 ]),
+      new Color("hsl", [ queryParams.hStart || coords[0] || 0, 100, 50 ])
+    );
+    endTrackBackground = makeCssGradient(
+      new Color("hsl", [ queryParams.hEnd || coords[0] || 0, 0, 50 ]),
+      new Color("hsl", [ queryParams.hEnd || coords[0] || 0, 100, 50 ])
     );
   } else {
-    trackBackground = hueTrackBackground;
+    startTrackBackground = hueTrackBackground;
+    endTrackBackground = hueTrackBackground;
   }
 
   return(
@@ -57,7 +74,7 @@ const ColorCoordForm = ({ color, coordType }) => {
           coordType={coordType}
           label="↑ Dark end"
           value={startValue}
-          trackBackground={trackBackground}
+          trackBackground={startTrackBackground}
           onChange={value => 
             setQueryParams({
               ...queryParams,
@@ -91,7 +108,7 @@ const ColorCoordForm = ({ color, coordType }) => {
           coordType={coordType}
           label="↓ Light end"
           value={endValue}
-          trackBackground={trackBackground}
+          trackBackground={endTrackBackground}
           onChange={value => 
             setQueryParams({
               ...queryParams,
@@ -177,3 +194,13 @@ const hueTrackBackground = makeCssGradient(
   new Color("hsl", [ 353, 100, 50 ]),
   { space: "hsl", hue: "longer" }
 )
+
+const handleValue = (value, { ifUndefined, ifNaN }) => {
+  if (typeof value === "undefined") {
+    return ifUndefined;
+  } 
+  if (Number.isNaN(value)) {
+    return ifNaN;
+  } 
+  return Math.round(value);
+}

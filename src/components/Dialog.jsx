@@ -1,7 +1,8 @@
 import styled from "styled-components";
 import * as RadixDialog from '@radix-ui/react-dialog';
-import Button from "./Button";
 import Box from "./Box";
+import Button from "./Button";
+import ButtonBar from "./ButtonBar"
 
 const Dialog = { ...RadixDialog };
 
@@ -46,37 +47,24 @@ Dialog.Content = styled(Dialog.Content)`
     }
   }
 `
-Dialog.Footer = styled.div`
-  display: grid;
-  grid-auto-flow: column;
-  grid-auto-columns: minmax(min-content, 1fr);
-  
-  ${props => props.responsive && styled.css`
-    grid-auto-flow: row;
-    grid-auto-rows: minmax(min-content, 1fr);
+Dialog.Footer = ButtonBar;
 
-    @media (max-width: 767px) {
-      grid-auto-flow: row;
-      grid-auto-rows: minmax(min-content, 1fr);
-    }
-  `}
-`
-Dialog.DismissingAction = styled(Button).attrs(props => ({
-  prominence: "tertiary",
-  size: "large",
-  focusType: "interior"
-}))`
-  padding-inline: var(--box-padding-inline);
-  border-radius: 0;
-`
-Dialog.ConfirmingAction = styled(Button).attrs(props => ({
-  prominence: "primary",
-  size: "large",
-  focusType: "interior"
-}))`
-  padding-inline: var(--box-padding-inline);
-  border-radius: 0;
-`
+Dialog.DismissingAction = props => 
+  <Button 
+    prominence="primary" 
+    size="large"
+    focusType="interior"
+    {...props}
+  />
+
+Dialog.ConfirmingAction = props => 
+  <Button 
+    prominence="primary" 
+    size="large"
+    focusType="interior"
+    {...props}
+  />
+
 Dialog.Header = styled(Box.Cell)`
   --box-padding-block: 1rem;
 `

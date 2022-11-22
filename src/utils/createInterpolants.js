@@ -1,10 +1,27 @@
 import Color from 'colorjs.io';
 import { createInterpolant } from "./createInterpolant";
 
+const lerp = (min, max, t) => min * (1 - t) + max * t;
+
 const createInterpolants = (color, hStart, hEnd, sStart, sEnd) => {
   color = color.to("hsl");
 
-  const [hBase, sBase, lBase] = color.coords;
+  let [hBase, sBase, lBase] = color.coords;
+
+  // Grayscale colors have no hue and return NaN
+  // when converted to HSL.
+  if (Number.isNaN(hBase)) {
+    
+    if (hStart && hEnd) {
+      hBase = lerp(hStart, hEnd, lBase / 100);
+    } else if (hStart) {
+      hBase = hStart
+    } else if (hEnd) {
+      hBase = hEnd 
+    } else {
+      hBase = 0
+    }
+  }
 
   // Note that "== null" will return true for both undefined and null.
   // If changing this, remember to be careful of 0 evaluating to false.
