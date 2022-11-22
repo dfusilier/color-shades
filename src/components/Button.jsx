@@ -50,6 +50,12 @@ const Button = styled.button.attrs(props => ({
   `}
   ${props => props.prominence === "secondary" && `
     border: 1px solid var(--color-fg);
+    transition: background .2s ease, color 0.2s ease;
+    &:press {
+      background: var(--color-fg);
+      color: var(--color-bg);
+      transition: background .2s ease, color 0.2s ease;
+    }
   `}
   ${props => props.prominence === "tertiary" && `
     padding-inline: 0;

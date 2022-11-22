@@ -21,10 +21,11 @@ import Dialog from './components/Dialog';
 import EditShadesDialog from './EditShadesDialog';
 import { SwatchIcon, DocumentDuplicateIcon } from '@heroicons/react/24/outline';
 
-
 const MoreShadesSection = ({ colorObj, shade }) => {
   let [queryParams, setQueryParams] = useQueryParams();
-  let [textWasCopied, setTextWasCopied ] = useState(false);
+  let [openEditShadesTooltip, setOpenEditShadesTooltip ] = useState(false);
+  let [openCopyTooltip, setOpenCopyTooltip ] = useState(false);
+  let [copied, setCopied ] = useState(false);
 
   const shades = queryParams.shades 
     ? queryParams.shades.split('-').map(thisShade => parseInt(thisShade))
@@ -43,7 +44,7 @@ const MoreShadesSection = ({ colorObj, shade }) => {
       manipulation: change => setLightness(change),
       targets: shades.map(shade => shadeToContrast(shade))
     }).map(shade => shade.to("srgb"));
-  };
+  }
 
   const shadeColors = getShadeColors(shades);
   const shadeHexes = shadeColors.map(shade => shade.toString({ format: "hex" }));
@@ -59,16 +60,37 @@ const MoreShadesSection = ({ colorObj, shade }) => {
               <div className="flex-fit-x flex-row gap-0" style={{ marginInlineEnd: "-0.5rem"}}>
                 <Dialog.Root>
                   <Tooltip.Provider>
-                    <Tooltip.Root>
-                      <Tooltip.Trigger asChild >
+                    <Tooltip.Root open={openEditShadesTooltip}>
+                      <Tooltip.Trigger asChild>
                         <Dialog.Trigger asChild>
-                          <Button prominence="secondary" icon>
+                          <Button 
+                            prominence="secondary" 
+                            icon 
+                            onFocus={e => {
+                              e.preventDefault()
+                              setOpenEditShadesTooltip(true)
+                            }}
+                            onBlur={e => {
+                              e.preventDefault()
+                              setOpenEditShadesTooltip(false)
+                            }}
+                            onMouseEnter={e => {
+                              e.preventDefault()
+                              setOpenEditShadesTooltip(true)
+                            }}
+                            onMouseLeave={e => {
+                              e.preventDefault()
+                              setOpenEditShadesTooltip(false)
+                            }}
+                          >
                             <SwatchIcon className="h-2 w-2"/>
                           </Button>
                         </Dialog.Trigger>
                       </Tooltip.Trigger>
                       <Tooltip.Portal>
-                        <Tooltip.Content sideOffset={6}>
+                        <Tooltip.Content 
+                          sideOffset={6} 
+                        >
                           Edit shades
                           <Tooltip.Arrow />
                         </Tooltip.Content>
@@ -99,12 +121,33 @@ const MoreShadesSection = ({ colorObj, shade }) => {
                   </Dialog.Portal>
                 </Dialog.Root>
                 <Tooltip.Provider>
-                  <Tooltip.Root>
+                  <Tooltip.Root open={openCopyTooltip}>
                     <Tooltip.Trigger asChild>
-                      <Button prominence="secondary" icon onClick={e => {
-                        setTextWasCopied(true);
-                        setTimeout(setTextWasCopied(false), 1000);
-                        return navigator.clipboard.writeText(
+                      <Button 
+                      prominence="secondary" 
+                      icon 
+                      onFocus={e => {
+                        e.preventDefault();
+                        setOpenCopyTooltip(true);
+                      }}
+                      onBlur={e => {
+                        e.preventDefault();
+                        setOpenCopyTooltip(false);
+                        setCopied(false);
+                      }}
+                      onMouseEnter={e => {
+                        e.preventDefault();
+                        setOpenCopyTooltip(true);
+                      }}
+                      onMouseLeave={e => {
+                        e.preventDefault();
+                        setOpenCopyTooltip(false);
+                        setCopied(false);
+                      }}
+                      onClick={e => {
+                        e.preventDefault();
+                        setCopied(true);
+                        navigator.clipboard.writeText(
                           JSON.stringify(
                             shades.reduce((acc, shade, i) => ({
                               ...acc, [shade]: shadeHexes[i]
@@ -119,7 +162,7 @@ const MoreShadesSection = ({ colorObj, shade }) => {
                     </Tooltip.Trigger>
                     <Tooltip.Portal>
                       <Tooltip.Content sideOffset={6}>
-                        {textWasCopied ? "Copied!" : "Copy values"}
+                        {copied ? "Copied!" : "Copy values"}
                         <Tooltip.Arrow />
                       </Tooltip.Content>
                     </Tooltip.Portal>
