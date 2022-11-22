@@ -112,10 +112,10 @@ export default App;
 const black = new Color("black");
 const colorDefaults = [
   "#2E8B57", // seagreen
-  "#708090", // slategray
   "#FF6347", // tomato
-  "#1E90FF", // dodgerblue
+  "#2493FF", // dodgerblue
   "#483D8B", // darkslateblue
+  "#CE3794", // fuchsia
 ];
 
 const Header = styled(Section)`

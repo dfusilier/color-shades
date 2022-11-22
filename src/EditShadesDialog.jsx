@@ -85,11 +85,11 @@ const ChipButton = styled.button`
   flex-direction: row;
   align-items: center;
   border-radius: 999px;
+  transition: box-shadow 0.075s ease-out;
   &:focus {
     outline: none; 
-  }
-  &:focus-visible {
-    outline: 3px solid currentColor;
+    box-shadow: 0 0 0 3px var(--color-fg);
+    transition: box-shadow 0.1s ease-out; 
   }
 `
 

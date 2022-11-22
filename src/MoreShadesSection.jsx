@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from "styled-components";
 import Color from 'colorjs.io';
 
@@ -24,6 +24,7 @@ import { SwatchIcon, DocumentDuplicateIcon } from '@heroicons/react/24/outline';
 
 const MoreShadesSection = ({ colorObj, shade }) => {
   let [queryParams, setQueryParams] = useQueryParams();
+  let [textWasCopied, setTextWasCopied ] = useState(false);
 
   const shades = queryParams.shades 
     ? queryParams.shades.split('-').map(thisShade => parseInt(thisShade))
@@ -42,9 +43,10 @@ const MoreShadesSection = ({ colorObj, shade }) => {
       manipulation: change => setLightness(change),
       targets: shades.map(shade => shadeToContrast(shade))
     }).map(shade => shade.to("srgb"));
-  }
+  };
 
   const shadeColors = getShadeColors(shades);
+  const shadeHexes = shadeColors.map(shade => shade.toString({ format: "hex" }));
  
   return (
     <Section>
@@ -58,7 +60,7 @@ const MoreShadesSection = ({ colorObj, shade }) => {
                 <Dialog.Root>
                   <Tooltip.Provider>
                     <Tooltip.Root>
-                      <Tooltip.Trigger asChild>
+                      <Tooltip.Trigger asChild >
                         <Dialog.Trigger asChild>
                           <Button prominence="secondary" icon>
                             <SwatchIcon className="h-2 w-2"/>
@@ -66,9 +68,9 @@ const MoreShadesSection = ({ colorObj, shade }) => {
                         </Dialog.Trigger>
                       </Tooltip.Trigger>
                       <Tooltip.Portal>
-                        <Tooltip.Content className="TooltipContent" sideOffset={6}>
-                          Add to library
-                          <Tooltip.Arrow className="TooltipArrow" />
+                        <Tooltip.Content sideOffset={6}>
+                          Edit shades
+                          <Tooltip.Arrow />
                         </Tooltip.Content>
                       </Tooltip.Portal>
                     </Tooltip.Root>
@@ -97,16 +99,28 @@ const MoreShadesSection = ({ colorObj, shade }) => {
                   </Dialog.Portal>
                 </Dialog.Root>
                 <Tooltip.Provider>
-                    <Tooltip.Root>
-                      <Tooltip.Trigger asChild>
-                        <Button prominence="secondary" icon>
-                          <DocumentDuplicateIcon className="h-2 w-2" />
-                        </Button>
-                      </Tooltip.Trigger>
+                  <Tooltip.Root>
+                    <Tooltip.Trigger asChild>
+                      <Button prominence="secondary" icon onClick={e => {
+                        setTextWasCopied(true);
+                        setTimeout(setTextWasCopied(false), 1000);
+                        return navigator.clipboard.writeText(
+                          JSON.stringify(
+                            shades.reduce((acc, shade, i) => ({
+                              ...acc, [shade]: shadeHexes[i]
+                            }), {}),
+                            null, 
+                            2
+                          )
+                        );
+                      }}>
+                        <DocumentDuplicateIcon className="h-2 w-2" />
+                      </Button>
+                    </Tooltip.Trigger>
                     <Tooltip.Portal>
-                      <Tooltip.Content className="TooltipContent" sideOffset={6}>
-                        Copy values
-                        <Tooltip.Arrow className="TooltipArrow" />
+                      <Tooltip.Content sideOffset={6}>
+                        {textWasCopied ? "Copied!" : "Copy values"}
+                        <Tooltip.Arrow />
                       </Tooltip.Content>
                     </Tooltip.Portal>
                   </Tooltip.Root>
@@ -118,14 +132,14 @@ const MoreShadesSection = ({ colorObj, shade }) => {
           <PaletteAndTabs>
             <Palette>
               {shades.map((thisShade, i) => (
-                <Palette.Shade bg={shadeColors[i].toString({ format: "hex" })} key={i}>
+                <Palette.Shade bg={shadeHexes[i]} key={i}>
                   <div>
                     {thisShade === shade
                       ? `${shades[i]} ★`
                       : shades[i]
                     }
                   </div>
-                  <div>{shadeColors[i].toString({ format: "hex" })}</div>
+                  <div>{shadeHexes[i]}</div>
                 </Palette.Shade>
               ))}
             </Palette>
