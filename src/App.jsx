@@ -26,8 +26,19 @@ const App = () => {
     : queryParams.color;
 
   let colorObj;
+  let colorName;
   try {
     colorObj = new Color(color);
+    const hue = colorObj.to("hsl").coords[0];
+    colorName = Number.isNaN(hue)
+      ? "gray"
+      : hueRanges.find(hueRange => 
+        hueRange.min <= hue && hue <= hueRange.max
+      ).hueName;
+    if(colorName === "black" || colorName === "white") {
+      colorName = "neutral";
+    }
+    console.log(colorName)
   } catch {
     try {
       new Color("#" + color);
@@ -73,7 +84,7 @@ const App = () => {
                     value={color}
                     onChange={e => setQueryParams({ 
                       color: e.target.value
-                    })} 
+                    }, 0)} 
                   />
                   <ColorPicker 
                     aria-label="Edit color"
@@ -92,7 +103,7 @@ const App = () => {
               <Box.Cell className="flex-column gap-000">
                 <h2>How to use</h2>
                 <ul className="list-bulleted">
-                  <li>Use shades when naming colors (for example, "green{shade}").</li>
+                  <li>Use shades when naming colors (for example, "{colorName}{shade}").</li>
                   <li>Two colors with a difference of 100 or more have ≥ 4.5 contrast.</li>
                   <li>Two colors with a difference of 75 or more have ≥ 3.0 contrast.</li>
                 </ul>
@@ -152,3 +163,46 @@ const TitleAndLink = styled.div`
     }
   }
 `
+
+const hueRanges = [
+  {
+    min: 0,
+    max: 11,
+    hueName: "red"
+  },
+  {
+    min: 11,
+    max: 40,
+    hueName: "orange"
+  },
+  {
+    min: 40,
+    max: 77,
+    hueName: "yellow"
+  },
+  {
+    min: 77,
+    max: 167,
+    hueName: "green"
+  },
+  {
+    min: 167,
+    max: 248,
+    hueName: "blue"
+  },
+  {
+    min: 248,
+    max: 280,
+    hueName: "purple"
+  },
+  {
+    min: 280,
+    max: 335,
+    hueName: "pink"
+  },
+  {
+    min: 335,
+    max: 360,
+    hueName: "red"
+  }
+]

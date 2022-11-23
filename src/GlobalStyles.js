@@ -237,7 +237,7 @@ const GlobalStyles = createGlobalStyle`
     a {
         text-decoration: underline;
         transition: box-shadow 0.075s ease-out;
-        border-radius: 3px;
+        border-radius: 2px;
         cursor: pointer;
         &:focus {
             outline: none; 

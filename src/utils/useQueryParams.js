@@ -3,13 +3,15 @@ import { throttle } from 'lodash';
 
 const useQueryParams = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const searchParamsAsObject = Object.fromEntries(
+  const queryParams = Object.fromEntries(
     searchParams.entries()
   );
 
-  return [searchParamsAsObject, throttle(
-    setSearchParams, 100, { trailing: true, leading: false }
-  )];
+  const setQueryParams = (searchParams, throttleTime = 100) => throttle(
+    () => setSearchParams(searchParams), throttleTime, { trailing: true, leading: false }
+  )();
+
+  return [queryParams, setQueryParams];
 };
 
 export default useQueryParams;
