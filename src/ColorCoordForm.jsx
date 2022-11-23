@@ -129,13 +129,13 @@ const ColorCoordForm = ({ color, coordType }) => {
 }
 
 const CustomBoxCell = styled(Box.Cell)`
-  --box-padding-block: 16px;
-  --box-padding-inline: 16px;
-  padding-block-start: 12px;
+  --box-padding-block: 1rem;
+  --box-padding-inline: 1rem;
+  padding-block-start: 0.75rem;
   @media (min-width: 768px) {
-    --box-padding-block: 16px;
-    --box-padding-inline: 24px;
-    padding-block-start: 8px;
+    --box-padding-block: 1.75rem;
+    --box-padding-inline: 1.5rem;
+    padding-block-start: 1.25rem;
   }
 `
 

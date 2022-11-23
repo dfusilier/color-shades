@@ -54,7 +54,10 @@ const App = () => {
         <Box bg={"#161616"}>
           <Box.Column>
             <Box.Cell className="flex-column gap-0">
-              <h1 className="type-size-4">Color shade</h1>
+              <TitleAndLink>
+                <h1 className="type-size-4">Color shades</h1>
+                <span className="type-size-00 color-fg-subdued">by <a href="https://twitter.com/davidfusilier">David Fusilier</a></span>
+              </TitleAndLink>
               <p className="type-size-1">Calculate a color's shade and use it to quickly determine color contrast.</p>
             </Box.Cell>
             <Box.Cell>
@@ -102,6 +105,15 @@ const App = () => {
     { colorObj && 
       <MoreShadesSection colorObj={colorObj} shade={shade} />
     }
+
+    {/* <Section>
+      <Box>
+        <Box.Cell>
+          <div> Made by David Fusilier</div>
+          <div className="type-size-00">Twitter • Github • LinkedIn</div>
+        </Box.Cell>
+      </Box>
+    </Section> */}
       
     </div>
   );
@@ -124,5 +136,19 @@ const Header = styled(Section)`
   & > * { width: 100%; }
   @media (min-width: 768px) {
     min-height: calc(100vh - 2.5rem);
+  }
+`
+
+const TitleAndLink = styled.div`
+  & > * {
+    display: block;
+    margin-block-end: 0.25rem;
+  }
+  @media (min-width: 768px) {
+    & > * {
+      display: inline;
+      margin-block-end: 0;
+      margin-inline-end: 0.75rem;
+    }
   }
 `

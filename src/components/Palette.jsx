@@ -19,8 +19,8 @@ Palette.Shade = styled.div.attrs(props => ({
     gap: 0.25rem;
     justify-content: space-between;
     align-items: center;
-    padding-block: 8px;
-    padding-inline: 20px;
+    padding-block: 0.75rem;
+    padding-inline: 1.25rem;
     padding-inline: var(--box-padding-inline);
 `;
 

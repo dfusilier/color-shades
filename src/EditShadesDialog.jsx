@@ -18,6 +18,12 @@ const EditShadesDialog = ({ shade, shades, getShadeColors, onSave }) => {
   const [newShade, setNewShade] = useState("");
   const shadeColors = getShadeColors(newShades);
 
+  const handleSubmit = e => {
+    e.preventDefault();
+    newShade && setNewShades(uniq([ ...newShades, parseInt(newShade) ]).sort((a, b) => a - b));
+    setNewShade("");
+  };
+
   return (
     <Box>
       <Box.Column>
@@ -49,7 +55,7 @@ const EditShadesDialog = ({ shade, shades, getShadeColors, onSave }) => {
               </Chip>
             )}
           </ChipGroup>
-          <div className="flex-row gap-0 flex-align-center">
+          <form className="flex-row gap-0 flex-align-center" onSubmit={handleSubmit}>
             <TextField 
               aria-label="New shade"
               type="number" 
@@ -59,13 +65,14 @@ const EditShadesDialog = ({ shade, shades, getShadeColors, onSave }) => {
               max={200}
               step={1}
             />
-            <Button prominence="secondary" size="medium" noWrap onClick={e => {
-              newShade && setNewShades(uniq([ ...newShades, parseInt(newShade) ]).sort((a, b) => a - b))
-              setNewShade("")
-            }}>
+            <Button 
+              prominence="secondary" 
+              size="medium" 
+              noWrap 
+              onClick={handleSubmit}>
               Add shade
             </Button>
-          </div>
+          </form>
         </Dialog.Body>
         <Dialog.Footer>
           <Dialog.Close asChild>

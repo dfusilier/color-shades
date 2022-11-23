@@ -97,6 +97,10 @@ const GlobalStyles = createGlobalStyle`
         line-height: var(--line-height-6);
     }
 
+    .color-fg-subdued {
+        color: var(--color-fg-subdued);
+    }
+
     .font-weight-bold {
         font-weight: bold;
     }
@@ -224,9 +228,22 @@ const GlobalStyles = createGlobalStyle`
     input,
     legend,
     fieldset, 
+    a,
     p, h1, h2, h3, h4, h5, h6, ul, ol {
         all: unset;
         box-sizing: border-box;
+    }
+
+    a {
+        text-decoration: underline;
+        transition: box-shadow 0.075s ease-out;
+        border-radius: 3px;
+        cursor: pointer;
+        &:focus {
+            outline: none; 
+            box-shadow: 0 0 0 2px var(--color-fg);
+            transition: box-shadow 0.1s ease-out; 
+        }
     }
 
     .list-bulleted {

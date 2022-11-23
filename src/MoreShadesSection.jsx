@@ -61,28 +61,27 @@ const MoreShadesSection = ({ colorObj, shade }) => {
                 <Dialog.Root>
                   <Tooltip.Provider>
                     <Tooltip.Root open={openEditShadesTooltip}>
-                      <Tooltip.Trigger asChild>
+                      <Tooltip.Trigger 
+                        asChild
+                        onFocus={e => {
+                          e.preventDefault()
+                          setOpenEditShadesTooltip(true)
+                        }}
+                        onBlur={e => {
+                          e.preventDefault()
+                          setOpenEditShadesTooltip(false)
+                        }}
+                        onMouseEnter={e => {
+                          e.preventDefault()
+                          setOpenEditShadesTooltip(true)
+                        }}
+                        onMouseLeave={e => {
+                          e.preventDefault()
+                          setOpenEditShadesTooltip(false)
+                        }}
+                      >
                         <Dialog.Trigger asChild>
-                          <Button 
-                            prominence="secondary" 
-                            icon 
-                            onFocus={e => {
-                              e.preventDefault()
-                              setOpenEditShadesTooltip(true)
-                            }}
-                            onBlur={e => {
-                              e.preventDefault()
-                              setOpenEditShadesTooltip(false)
-                            }}
-                            onMouseEnter={e => {
-                              e.preventDefault()
-                              setOpenEditShadesTooltip(true)
-                            }}
-                            onMouseLeave={e => {
-                              e.preventDefault()
-                              setOpenEditShadesTooltip(false)
-                            }}
-                          >
+                          <Button prominence="secondary" icon>
                             <SwatchIcon className="h-2 w-2"/>
                           </Button>
                         </Dialog.Trigger>
@@ -122,10 +121,8 @@ const MoreShadesSection = ({ colorObj, shade }) => {
                 </Dialog.Root>
                 <Tooltip.Provider>
                   <Tooltip.Root open={openCopyTooltip}>
-                    <Tooltip.Trigger asChild>
-                      <Button 
-                      prominence="secondary" 
-                      icon 
+                    <Tooltip.Trigger 
+                      asChild
                       onFocus={e => {
                         e.preventDefault();
                         setOpenCopyTooltip(true);
@@ -144,19 +141,24 @@ const MoreShadesSection = ({ colorObj, shade }) => {
                         setOpenCopyTooltip(false);
                         setCopied(false);
                       }}
-                      onClick={e => {
-                        e.preventDefault();
-                        setCopied(true);
-                        navigator.clipboard.writeText(
-                          JSON.stringify(
-                            shades.reduce((acc, shade, i) => ({
-                              ...acc, [shade]: shadeHexes[i]
-                            }), {}),
-                            null, 
-                            2
-                          )
-                        );
-                      }}>
+                    >
+                      <Button 
+                        prominence="secondary" 
+                        icon 
+                        onClick={e => {
+                          e.preventDefault();
+                          setCopied(true);
+                          navigator.clipboard.writeText(
+                            JSON.stringify(
+                              shades.reduce((acc, shade, i) => ({
+                                ...acc, [shade]: shadeHexes[i]
+                              }), {}),
+                              null, 
+                              2
+                            )
+                          );
+                        }}
+                      >
                         <DocumentDuplicateIcon className="h-2 w-2" />
                       </Button>
                     </Tooltip.Trigger>
@@ -217,7 +219,6 @@ export default MoreShadesSection;
 const PaletteAndTabs = styled(Box.Row)`
   display: grid;
   grid-template-columns: 3fr 2fr;
-  min-height: 77vh;
   @media (min-width: 768px) {
     grid-template-columns: 3fr 1fr;
   }
