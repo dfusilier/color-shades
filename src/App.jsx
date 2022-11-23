@@ -1,52 +1,63 @@
 import React from 'react';
 import styled from "styled-components";
-import Color from 'color';
-import { useSearchParams } from 'react-router-dom';
+import Color from 'colorjs.io';
 
 // Utils
-import calcShade from './utils/calcShade';
-import cssTheme from './utils/makeTheme';
-import pickRandom from './utils/pickRandom';
+import useQueryParams from './utils/useQueryParams';
+import shadeFromContrast from './utils/shadeFromContrast';
+import { sample } from 'lodash';
 
 // Components
 import GlobalStyles from './GlobalStyles';
+import Section from './components/Section';
 import Box from './components/Box';
 import TextField from './components/TextField';
-import ColorPicker from './components/ColorPicker';
+import ColorPicker from './components/ColorPicker'; 
+import MoreShadesSection from './MoreShadesSection';
 
 const App = () => {
-  let [searchParams, setSearchParams] = useSearchParams();
-  const colorSearchParam = searchParams.get("color");
+  let [queryParams, setQueryParams] = useQueryParams();
 
-  // Null is returned when there's no color query.
-  // Undefined when there's a blank color query,
+  // Undefined is returned when there's no color query.
+  // Null when there's a blank color query,
   // which happens when someone clears the field.
-  const colorString = colorSearchParam === null ? pickRandom(colorStringDefaults) : colorSearchParam;
-  
-  let color;
+  let color = typeof queryParams.color === "undefined"
+    ? sample(colorDefaults)
+    : queryParams.color;
+
+  let colorObj;
   try {
-    color = new Color(colorString);
+    colorObj = new Color(color);
   } catch {
     try {
-      new Color("#" + colorString);
-      setSearchParams({ color: "#" + colorString });
-    } catch {}
+      new Color("#" + color);
+      setQueryParams({ 
+        color: "#" + color
+      });
+    } catch {
+      console.log("catch", color);
+    }
   }
 
-  const shade = color ? 
-    Math.round(
-      calcShade(color.contrast(black))
-    ) : "?";
-    
+  const shade = colorObj ? Math.round(
+    shadeFromContrast(colorObj.contrastWCAG21(black))
+  ) : "?";
+  
+  if (colorObj) {
+    document.body.style.backgroundColor = color;
+  }
+
   return (
     <div className="App">
-      <GlobalStyles bg={color ? colorString : undefined} />
+      <GlobalStyles bg={colorObj ? color : undefined} />
       <Header>
-        
         <Box bg={"#161616"}>
           <Box.Column>
             <Box.Cell className="flex-column gap-0">
-              <h1 className="type-size-4">Color shades</h1>
+              <TitleAndLink>
+                <h1 className="type-size-4">Color shades</h1>
+                <span className="type-size-00 color-fg-subdued">by <a href="https://twitter.com/davidfusilier">David Fusilier</a></span>
+              </TitleAndLink>
               <p className="type-size-1">Calculate a color's shade and use it to quickly determine color contrast.</p>
             </Box.Cell>
             <Box.Cell>
@@ -59,26 +70,28 @@ const App = () => {
                     id="color-input" 
                     name="color-input"
                     type="text" 
-                    value={colorString}
-                    onChange={e => setSearchParams({ color: e.target.value })} 
+                    value={color}
+                    onChange={e => setQueryParams({ 
+                      color: e.target.value
+                    })} 
                   />
                   <ColorPicker 
                     aria-label="Edit color"
-                    value={colorString} 
-                    onChange={e => setSearchParams({ color: e.target.value })}
-                    bg={colorString} 
+                    value={colorObj ? color : "#000000"} 
+                    onChange={e => setQueryParams({ color: e.target.value })}
+                    bg={colorObj ? color : "#000000"} 
                   />
                 </div>
               </fieldset>
             </Box.Cell>
             <Box.ResponsiveRow>
-              <Box.Cell className="flex-column gap-000">
-                <h2>Shade (0–200)</h2>
+              <Box.Cell className="flex-column flex-fit-x gap-000">
+                <h2 style={{whiteSpace: "nowrap"}}>Shade (0–200)</h2>
                 <div className="type-size-5">{shade}</div>
               </Box.Cell>
               <Box.Cell className="flex-column gap-000">
                 <h2>How to use</h2>
-                <ul>
+                <ul className="list-bulleted">
                   <li>Use shades when naming colors (for example, "green{shade}").</li>
                   <li>Two colors with a difference of 100 or more have ≥ 4.5 contrast.</li>
                   <li>Two colors with a difference of 75 or more have ≥ 3.0 contrast.</li>
@@ -88,6 +101,20 @@ const App = () => {
           </Box.Column>
         </Box>
       </Header>
+
+    { colorObj && 
+      <MoreShadesSection colorObj={colorObj} shade={shade} />
+    }
+
+    {/* <Section>
+      <Box>
+        <Box.Cell>
+          <div> Made by David Fusilier</div>
+          <div className="type-size-00">Twitter • Github • LinkedIn</div>
+        </Box.Cell>
+      </Box>
+    </Section> */}
+      
     </div>
   );
 }
@@ -95,33 +122,33 @@ const App = () => {
 export default App;
 
 const black = new Color("black");
-const colorStringDefaults = [
+const colorDefaults = [
   "#2E8B57", // seagreen
-  "#708090", // slategray
   "#FF6347", // tomato
-  "#1E90FF", // dodgerblue
-  "#87CEFA", // lightskyblue
-  "#E6E6FA", // lavender
-  "#FFE4E1", // mistyrose
+  "#2493FF", // dodgerblue
   "#483D8B", // darkslateblue
-  "#FFD700", // gold
-  "#800000"  // maroon
+  "#CE3794", // fuchsia
 ];
 
-const Header = styled.div`
-  ${({bg}) => bg ? cssTheme(bg) : ""}
+const Header = styled(Section)`
   display: flex;
-  gap: 2rem;
-  padding-block: 24px;
-  padding-inline: 24px;
-  margin: auto;
-  width: 100%;
-  max-width: 864px;
   align-items: center;
-
+  & > * { width: 100%; }
   @media (min-width: 768px) {
-    padding-block: 48px;
-    padding-inline: 48px;
-    min-height: 95vh;
+    min-height: calc(100vh - 2.5rem);
+  }
+`
+
+const TitleAndLink = styled.div`
+  & > * {
+    display: block;
+    margin-block-end: 0.25rem;
+  }
+  @media (min-width: 768px) {
+    & > * {
+      display: inline;
+      margin-block-end: 0;
+      margin-inline-end: 0.75rem;
+    }
   }
 `

@@ -9,7 +9,7 @@
 // * 4.5 contrast: Difference of 100 
 // * 3.0 contrast: Difference of 75
 
-const calcShade = contrast => 
+const shadeFromContrast = contrast => 
   Math.log(contrast) / Math.log(21) * 200;
 
-export default calcShade;
+export default shadeFromContrast;
