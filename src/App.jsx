@@ -16,7 +16,11 @@ import ColorPicker from './components/ColorPicker';
 import MoreShadesSection from './MoreShadesSection';
 
 const App = () => {
-  let [queryParams, setQueryParams] = useQueryParams();
+  let [
+    queryParams, 
+    setQueryParams,
+    setThrottledQueryParams,
+  ] = useQueryParams();
 
   // Undefined is returned when there's no color query.
   // Null when there's a blank color query,
@@ -38,7 +42,6 @@ const App = () => {
     if(colorName === "black" || colorName === "white") {
       colorName = "neutral";
     }
-    console.log(colorName)
   } catch {
     try {
       new Color("#" + color);
@@ -89,7 +92,7 @@ const App = () => {
                   <ColorPicker 
                     aria-label="Edit color"
                     value={colorObj ? color : "#000000"} 
-                    onChange={e => setQueryParams({ color: e.target.value })}
+                    onChange={e => setThrottledQueryParams({ color: e.target.value })}
                     bg={colorObj ? color : "#000000"} 
                   />
                 </div>

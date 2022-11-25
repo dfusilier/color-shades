@@ -25,7 +25,7 @@ const coordVars = {
 }
 
 const ColorCoordForm = ({ color, coordType }) => {
-  let [queryParams, setQueryParams] = useQueryParams();
+  let [queryParams, setQueryParams, setThrottledQueryParams] = useQueryParams();
   const { abbrev, index } = coordVars[coordType];
   const coords = color.to("hsl").coords;
 
@@ -80,8 +80,15 @@ const ColorCoordForm = ({ color, coordType }) => {
           label="↑ Dark end"
           value={startValue}
           trackBackground={startTrackBackground}
-          onChange={value => 
+          onFieldChange={value => 
             setQueryParams({
+              ...queryParams,
+              color: baseColorHex,
+              [startKey]: value
+            })
+          }
+          onSliderChange={value => 
+            setThrottledQueryParams({
               ...queryParams,
               color: baseColorHex,
               [startKey]: value
@@ -97,7 +104,14 @@ const ColorCoordForm = ({ color, coordType }) => {
           label="★ Base color"
           value={baseValue}
           trackBackground={baseTrackBackground}
-          onChange={value => setQueryParams({
+          onFieldChange={value => setQueryParams({
+            ...queryParams,
+            color: color.set({ 
+                [`hsl.${abbrev}`]: value
+              })
+              .to("srgb").toString({ format: "hex" })
+          })}
+          onSliderChange={value => setThrottledQueryParams({
             ...queryParams,
             color: color.set({ 
                 [`hsl.${abbrev}`]: value
@@ -114,8 +128,15 @@ const ColorCoordForm = ({ color, coordType }) => {
           label="↓ Light end"
           value={endValue}
           trackBackground={endTrackBackground}
-          onChange={value => 
+          onFieldChange={value => 
             setQueryParams({
+              ...queryParams,
+              color: baseColorHex,
+              [endKey]: value
+            })
+          }
+          onSliderChange={value => 
+            setThrottledQueryParams({
               ...queryParams,
               color: baseColorHex,
               [endKey]: value
@@ -144,7 +165,8 @@ const Input = ({
   coordType, 
   label, 
   value, 
-  onChange,
+  onFieldChange,
+  onSliderChange,
   trackBackground
 }) => {
   const { min, max } = coordVars[coordType];
@@ -162,7 +184,7 @@ const Input = ({
           min={min}
           max={max}
           value={value}
-          onChange={e => onChange(e.target.value)}
+          onChange={e => onFieldChange(e.target.value)}
         />
       </FormGroup>
 
@@ -173,7 +195,7 @@ const Input = ({
         max={max} 
         step={1} 
         aria-label={label}
-        onValueChange={value => onChange(value)}
+        onValueChange={value => onSliderChange(value)}
       >
         <Slider.Track className="SliderTrack" background={trackBackground}>
           <Slider.Range className="SliderRange" />
