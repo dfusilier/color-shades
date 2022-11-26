@@ -20,8 +20,10 @@ const EditShadesDialog = ({ shade, shades, getShadeColors, onSave }) => {
 
   const handleSubmit = e => {
     e.preventDefault();
-    newShade && setNewShades(uniq([ ...newShades, parseInt(newShade) ]).sort((a, b) => a - b));
-    setNewShade("");
+    if (newShade && 0 <= newShade && newShade <= 200) {
+      setNewShades(uniq([ ...newShades, parseInt(newShade) ]).sort((a, b) => a - b));
+      setNewShade("");
+    }
   };
 
   return (
@@ -61,7 +63,12 @@ const EditShadesDialog = ({ shade, shades, getShadeColors, onSave }) => {
               aria-label="New shade"
               type="number" 
               value={newShade}
-              onChange={e => setNewShade(e.target.value)} 
+              onChange={e => {
+                e.preventDefault()
+                if (e.target.value.toString().length <= 3) {
+                  setNewShade(e.target.value);
+                }
+              }} 
               min={0}
               max={200}
               size={20}
