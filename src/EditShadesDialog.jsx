@@ -37,32 +37,34 @@ const EditShadesDialog = ({ shade, shades, getShadeColors, onSave }) => {
             {newShades.map((thisShade, i) => 
               <Chip 
                 bg={shadeColors[i].toString({ format: "hex" })} 
-                key={i}>
-                  {thisShade}
-                  {thisShade === shade 
-                    ? <StarIcon className="h-1 w-1" />
-                    : <ChipButton 
-                        aria-label="Remove shade"
-                        className="flex-row flex-align-center"
-                        onClick={e => setNewShades(
-                          newShades.filter(s => s !== thisShade)
-                        )}
-                      >
-                          <XMarkIcon className="h-1 w-1" />
-                      </ChipButton>
-                  }
-                  
+                key={i}
+              >
+                {thisShade}
+                {thisShade === shade 
+                  ? <StarIcon className="h-1 w-1" />
+                  : <ChipButton 
+                      aria-label="Remove shade"
+                      className="flex-row flex-align-center"
+                      onClick={e => setNewShades(
+                        newShades.filter(s => s !== thisShade)
+                      )}
+                    >
+                        <XMarkIcon className="h-1 w-1" />
+                    </ChipButton>
+                }
               </Chip>
             )}
           </ChipGroup>
           <form className="flex-row gap-0 flex-align-center" onSubmit={handleSubmit}>
             <TextField 
+              block
               aria-label="New shade"
               type="number" 
               value={newShade}
               onChange={e => setNewShade(e.target.value)} 
               min={0}
               max={200}
+              size={20}
               step={1}
             />
             <Button 

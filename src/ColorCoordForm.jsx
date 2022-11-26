@@ -33,14 +33,16 @@ const ColorCoordForm = ({ color, coordType }) => {
     ifUndefined: 0, 
     ifNaN: 0,
   });
-  const startKey = `${abbrev}Start`;
 
+  const startKey = `${abbrev}Start`;
+  const startUndefined = typeof queryParams[startKey] === "undefined";
   const startValue = handleValue(queryParams[startKey], { 
     ifUndefined: baseValue, 
     ifNaN: 0 
   });
 
   const endKey = `${abbrev}End`;
+  const endUndefined = typeof queryParams[endKey] === "undefined";
   const endValue = handleValue(queryParams[endKey], { 
     ifUndefined: baseValue, 
     ifNaN: 0 
@@ -75,6 +77,7 @@ const ColorCoordForm = ({ color, coordType }) => {
     
       <CustomBoxCell className="flex-column flex-justify-center">
         <Input
+          subdued={startUndefined}
           id={`${coordType}-start-input`}
           coordType={coordType}
           label="↑ Dark end"
@@ -123,6 +126,7 @@ const ColorCoordForm = ({ color, coordType }) => {
 
       <CustomBoxCell className="flex-column flex-justify-center flex-fill-y">
         <Input
+          subdued={endUndefined}
           id={`${coordType}-end-input`}
           coordType={coordType}
           label="↓ Light end"
@@ -167,7 +171,8 @@ const Input = ({
   value, 
   onFieldChange,
   onSliderChange,
-  trackBackground
+  trackBackground,
+  subdued = false
 }) => {
   const { min, max } = coordVars[coordType];
   
@@ -176,6 +181,7 @@ const Input = ({
       <FormGroup>
         <label htmlFor={id}>{label}</label>
         <TextField 
+          subdued={subdued}
           className="type-size-0"
           id={id}
           name={id}
@@ -190,7 +196,7 @@ const Input = ({
 
       <Slider.Root 
         className="SliderRoot" 
-        defaultValue={[value]} 
+        value={[value]} 
         min={min} 
         max={max} 
         step={1} 

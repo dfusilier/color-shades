@@ -79,6 +79,7 @@ const App = () => {
                 <legend>Color</legend>
                 <div className="flex-row gap-1" style={{ alignItems: "end", marginBlockEnd: "8px"}}>
                   <TextField 
+                    block
                     className="type-size-2"
                     aria-label="Enter color"
                     id="color-input" 

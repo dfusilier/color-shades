@@ -15,7 +15,8 @@ const GlobalStyles = createGlobalStyle`
         --color-bg: #121212;
         --color-bg-tinted: rgba(255, 255, 255, 0.08);
         --color-fg: white;
-        --color-fg-subdued: rgba(255, 255, 255, 0.75);
+        --color-fg-subdued: rgba(255, 255, 255, 0.65);
+        --color-fg-subdued-more: rgba(255, 255, 255, 0.55);
         --color-fg-subdued-non-text: rgba(255, 255, 255, 0.5);
         --color-fg-subdued-decorative: rgba(255, 255, 255, 0.04);
 

@@ -1,3 +1,4 @@
+import React from "react";
 import styled from "styled-components";
 import * as RadixDialog from '@radix-ui/react-dialog';
 import Box from "./Box";
@@ -38,21 +39,25 @@ Dialog.Content = styled(Dialog.Content)`
 `
 Dialog.Footer = ButtonBar;
 
-Dialog.DismissingAction = props => 
+Dialog.DismissingAction = React.forwardRef((props, ref) => 
   <Button 
     prominence="primary" 
     size="large"
     focusType="interior"
+    ref={ref}
     {...props}
   />
+);
 
-Dialog.ConfirmingAction = props => 
+Dialog.ConfirmingAction = React.forwardRef((props, ref) => 
   <Button 
     prominence="primary" 
     size="large"
     focusType="interior"
+    ref={ref}
     {...props}
   />
+);
 
 Dialog.Header = styled(Box.Cell)`
   --box-padding-block: 1rem;

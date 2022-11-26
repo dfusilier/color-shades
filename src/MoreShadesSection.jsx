@@ -61,31 +61,31 @@ const MoreShadesSection = ({ colorObj, shade }) => {
                 <Dialog.Root>
                   <Tooltip.Provider>
                     <Tooltip.Root open={openEditShadesTooltip}>
-                      <Tooltip.Trigger 
-                        asChild
-                        onFocus={e => {
-                          e.preventDefault()
-                          setOpenEditShadesTooltip(true)
-                        }}
-                        onBlur={e => {
-                          e.preventDefault()
-                          setOpenEditShadesTooltip(false)
-                        }}
-                        onMouseEnter={e => {
-                          e.preventDefault()
-                          setOpenEditShadesTooltip(true)
-                        }}
-                        onMouseLeave={e => {
-                          e.preventDefault()
-                          setOpenEditShadesTooltip(false)
-                        }}
-                      >
-                        <Dialog.Trigger asChild>
+                      <Dialog.Trigger asChild>
+                        <Tooltip.Trigger 
+                          asChild
+                          onFocus={e => {
+                            e.preventDefault()
+                            setOpenEditShadesTooltip(true)
+                          }}
+                          onBlur={e => {
+                            e.preventDefault()
+                            setOpenEditShadesTooltip(false)
+                          }}
+                          onMouseEnter={e => {
+                            e.preventDefault()
+                            setOpenEditShadesTooltip(true)
+                          }}
+                          onMouseLeave={e => {
+                            e.preventDefault()
+                            setOpenEditShadesTooltip(false)
+                          }}
+                        >
                           <Button prominence="secondary" icon>
                             <SwatchIcon className="h-2 w-2"/>
                           </Button>
-                        </Dialog.Trigger>
-                      </Tooltip.Trigger>
+                        </Tooltip.Trigger>
+                      </Dialog.Trigger>
                       <Tooltip.Portal>
                         <Tooltip.Content 
                           sideOffset={6} 
@@ -106,6 +106,7 @@ const MoreShadesSection = ({ colorObj, shade }) => {
                         
                     } />
                     <Dialog.Content>
+                      <div>
                       <EditShadesDialog 
                         shade={shade}
                         shades={shades} 
@@ -116,6 +117,7 @@ const MoreShadesSection = ({ colorObj, shade }) => {
                           shades: shades.join("-")
                         })}
                       />
+                      </div>
                     </Dialog.Content>
                   </Dialog.Portal>
                 </Dialog.Root>
