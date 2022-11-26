@@ -50,13 +50,13 @@ const MoreShadesSection = ({ colorObj, shade }) => {
   const shadeHexes = shadeColors.map(shade => shade.toString({ format: "hex" }));
  
   return (
-    <Section>
+    <Section aria-labelledby="more-shades-heading">
       <Box bg={"#161616"}>
         <Box.Column>
 
           <Box.Cell className="flex-column gap-0">
             <div className="flex-row flex-gap-1 flex-align-center">
-              <h2 className="type-size-4 flex-fill-x">More shades</h2>
+              <h2 id="more-shades-heading" className="type-size-4 flex-fill-x">More shades</h2>
               <div className="flex-fit-x flex-row gap-0" style={{ marginInlineEnd: "-0.5rem"}}>
                 <Dialog.Root>
                   <Tooltip.Provider>

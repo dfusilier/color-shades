@@ -64,12 +64,12 @@ const App = () => {
   return (
     <div className="App">
       <GlobalStyles bg={colorObj ? color : undefined} />
-      <Header>
+      <Header aria-labelledby="color-shades-heading">
         <Box bg={"#161616"}>
           <Box.Column>
             <Box.Cell className="flex-column gap-0">
               <TitleAndLink>
-                <h1 className="type-size-4">Color shades</h1>
+                <h1 id="color-shades-heading" className="type-size-4">Color shades</h1>
                 <span className="type-size-00 color-fg-subdued">by <a href="https://twitter.com/davidfusilier">David Fusilier</a></span>
               </TitleAndLink>
               <p className="type-size-1">Calculate a color's shade and use it to quickly determine color contrast.</p>
