@@ -245,7 +245,7 @@ const getHslCoordData = (coordKey, color, queryParams) => {
   const base = {};
   base.queryKey = `${coordKey}Base`;
   base.queryValue = queryParams[base.queryKey];
-  base.colorValue = color.hsl[coordKey];
+  base.colorValue = Math.round(color.hsl[coordKey]);
   base.calcValue = base.queryValue || base.colorValue || min;
   base.inputValue = isNaN(base.queryValue) ? base.calcValue : base.queryValue;
   base.inputValueIsFallback = !base.queryValue && !base.colorValue;
