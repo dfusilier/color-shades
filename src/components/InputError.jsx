@@ -19,6 +19,7 @@ const Container = styled.span`
   border-radius: 0.375rem;
   width: auto;
   max-width: 100%;
+  box-shadow: hsl(206 22% 7% / 35%) 0px 5px 19px -5px, hsl(206 22% 7% / 20%) 0px 5px 10px -7.5px;
   &:after {
     position: absolute;
     content: "";

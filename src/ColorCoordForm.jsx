@@ -4,6 +4,7 @@ import styled from "styled-components";
 import Color from 'colorjs.io';
 
 // Utils
+import toCssColor from './utils/toCssColor';
 import { omit } from 'lodash';
 
 // Components
@@ -26,7 +27,6 @@ const ColorCoordForm = ({ color, coordType }) => {
   const h = getHslCoordData("h", color, queryParams);
   const s = getHslCoordData("s", color, queryParams);
   const coord = coordType === "h" ? h : s;
-  // const baseColorHex = color.to("srgb").toString({ format: "hex" });
 
   if (coordType === "s") {
     coord.base.trackBackground = makeCssGradient(
@@ -48,58 +48,56 @@ const ColorCoordForm = ({ color, coordType }) => {
   }
 
   const handleInputChange = (queryKey, value, throttle = false) => {
-    let newQueryParams = {};
-    const colorHex = color.to("srgb").toString({ format: "hex" });
+    const colorValue = toCssColor(color, true);
+    const setQueryParamsFn = throttle 
+      ? setThrottledQueryParams
+      : setQueryParams;
 
-    // If a coord for the base color changes, things 
-    // are simple. Otherwise, the color query parameter 
-    // may need to change too.
+    // If anything changes, add the current color value to 
+    // the query params. This ensures a random color isn't applied
+    // on reload.
+    let newQueryParams = { ...queryParams, color: colorValue };
     
+    // If non-base coord changes, things are simple.
+    // Update the value.
     if(queryKey !== "hBase" && queryKey !== "sBase") {
+      newQueryParams[queryKey] = value;
+      return setQueryParams(newQueryParams);
+    } 
 
-      newQueryParams = { ...queryParams, color: colorHex, [queryKey]: value };
+    // Otherwise, things are a little more complicated.
+    // Changing hBase or sBase will create a new color.
+    const colorNewCoords = queryKey === "hBase" 
+      ? [ Number(value), Number(s.base.calcValue), Number(color.hsl.l) ] 
+      : [ Number(h.base.calcValue), Number(value), Number(color.hsl.l) ];
+    const colorNew = new Color("hsl", colorNewCoords);
 
-    } else {
+    // If the new color is in the HSL (same gamut as sRGB)...
+    if (colorNew.inGamut()) {
 
-      const colorNewCoords = queryKey === "hBase" 
-        ? [ value, s.base.calcValue, color.hsl.l ] 
-        : [ h.base.calcValue, value, color.hsl.l ];
+      // ...then update to equivalent hex color value.
+      const colorNewValue = toCssColor(colorNew, true);
+      newQueryParams.color = colorNewValue;
 
-      const colorNew = new Color("hsl", colorNewCoords);
-      const colorNewHex = colorNew.to("srgb").toString({ format: "hex" });
-
-      if (colorHex === colorNewHex) {
-        newQueryParams = {
-          ...queryParams,
-          color: colorHex,
-          [queryKey]: value
-        }
-      } else {
-
-        newQueryParams = {
-          ...omit(queryParams, ["hBase", "sBase"]),
-          color: colorNewHex
-        }
-
-        const colorFromNewHex = new Color(colorNewHex).to("hsl");
-
-        if (colorFromNewHex.hsl.h !== colorNew.hsl.h) {
-          newQueryParams = {
-            ...newQueryParams,
-            hBase: colorNew.hsl.h
-          }
-        }
-        if (colorFromNewHex.hsl.s !== colorNew.hsl.s) {
-          newQueryParams = {
-            ...newQueryParams,
-            sBase: colorNew.hsl.s
-          }
-        }
+      // Omit the old hBase and sBase values – but if different
+      // hue and sat values are seen when converting the new color
+      // value hex back into HSL, then apply new hue and sat values. 
+      newQueryParams = omit(newQueryParams, ["hBase", "sBase"]);
+      const colorFromNewHex = new Color(colorNewValue).to("hsl");
+      if (Math.round(colorFromNewHex.hsl.h) !== colorNew.hsl.h) {
+        newQueryParams.hBase = colorNew.hsl.h;
       }
+      if (Math.round(colorFromNewHex.hsl.s) !== colorNew.hsl.s) {
+        newQueryParams.sBase = colorNew.hsl.s;
+      }
+
+    // If the new color is out of gamut, the color value can't
+    // be updated. Instead, just update hBase or sBase.
+    } else {
+      newQueryParams[queryKey] = value;
     }
-    return throttle 
-      ? setThrottledQueryParams(newQueryParams)
-      : setQueryParams(newQueryParams);
+
+    return setQueryParamsFn(newQueryParams);
   };
   
   return(
@@ -130,7 +128,7 @@ const ColorCoordForm = ({ color, coordType }) => {
           label="★ Base color"
           value={coord.base.inputValue}
           max={coord.max}
-          minMaxField={false}
+          minMaxField={true}
           subduedField={coord.base.inputValueIsFallback}
           trackBackground={coord.base.trackBackground}
           onFieldChange={value => handleInputChange(
@@ -210,6 +208,7 @@ const hslData = {
 
 const getHslCoordData = (coordKey, color, queryParams) => {
   const { min, max, name } = hslData[coordKey];
+  
   const base = {};
   base.queryKey = `${coordKey}Base`;
   base.queryValue = queryParams[base.queryKey];

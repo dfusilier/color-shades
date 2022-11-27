@@ -2,7 +2,7 @@
 import InputLabel from './InputLabel';
 import TextField from './TextField';
 import Slider from './Slider';
-// import InputError from './InputError';
+import InputError from './InputError';
 
 const ColorCoordInput = ({ 
   label,
@@ -13,7 +13,8 @@ const ColorCoordInput = ({
   onFieldChange,
   onSliderChange,
   trackBackground = "transparent",
-  subduedField = false
+  subduedField = false,
+  minMaxField = false
 }) => {
 
   const minMax = v => {
@@ -21,6 +22,10 @@ const ColorCoordInput = ({
     if (v > max) { return max; }
     return v;
   };
+
+  const underMin = value < min;
+  const overMax = value > max;
+  const invalid = minMaxField && (underMin || overMax);
   
   return(
     <div className="flex-column gap-1">
@@ -31,17 +36,17 @@ const ColorCoordInput = ({
           type="number" 
           value={value}
           step={step}
-          // aria-invalid={invalid}
+          aria-invalid={invalid}
           block
           subdued={subduedField}
           onChange={e => onFieldChange(e.target.value)}
         />
-        {/* { underMin && minMaxField &&
+        { underMin && minMaxField &&
           <InputError className="w-block">Min is {min}</InputError>
         }
         { overMax && minMaxField &&
           <InputError className="w-block">Max is {max}.</InputError>
-        } */}
+        }
       </InputLabel>
 
       <Slider.Root 

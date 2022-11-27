@@ -12,7 +12,7 @@ const black = new Color("black");
 // Decided a function that works specifically
 // for accessible contrats was fine for now.
 
-const shadeFromContrast = ({
+const suggestShades = ({
   manipulation,
   targets,
   increments = 5,
@@ -51,4 +51,4 @@ const shadeFromContrast = ({
   });
 };
 
-export default shadeFromContrast;
+export default suggestShades;

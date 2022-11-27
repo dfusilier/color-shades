@@ -1,7 +1,8 @@
-
+import { useState, useEffect } from 'react';
 import Color from 'colorjs.io';
 
 import formatHex from '../utils/formatHex';
+import toCssColor from '../utils/toCssColor';
 
 import TextField from './TextField';
 import ColorPicker from './ColorPicker'; 
@@ -16,21 +17,32 @@ const ColorInput = ({
   ...otherProps
 }) => {
 
-  let color; 
-  let pickerValue = "#000000";
-  let isTransparent = false;
-  
-  try {
-    color = new Color(value);
-    isTransparent = color.alpha !== 1;
-    pickerValue = isTransparent 
-      ? pickerValue 
-      : formatHex(
-        color.to("srgb").toString({ format: "hex" })
-      );
-  } catch {}
+  let [ showErrors, setShowErrors ] = useState(false);
 
-  const invalid = isTransparent;
+  let colorObj; 
+  let invalid = false;
+  let isTransparent = false;
+
+  try {
+    colorObj = new Color(value);
+    isTransparent = colorObj.alpha !== 1;
+    invalid = isTransparent;
+  } catch {
+    invalid = true;
+  }
+
+  const pickerValue = invalid 
+    ? "#000000" 
+    : formatHex(toCssColor(colorObj));
+
+  // Show errors if they aren't corrected
+  // after a set amount of time.
+  useEffect(() => {
+    setShowErrors(false);
+    if(invalid) {
+      setTimeout(() => setShowErrors(true), 3000);
+    }
+  }, [invalid, value]);
 
   return(
     <fieldset className={"stack-00 " + className} {...otherProps}>
@@ -47,8 +59,11 @@ const ColorInput = ({
             aria-invalid={invalid}
             onChange={onFieldChange} 
           />
-          { isTransparent &&
+          { isTransparent && showErrors &&
             <InputError>Shades don't work with transparent colors.</InputError>
+          }
+          { invalid && !isTransparent && showErrors &&
+            <InputError>Enter a valid CSS color.</InputError>
           }
         </InputLabel>
         

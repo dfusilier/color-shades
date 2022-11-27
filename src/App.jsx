@@ -5,6 +5,7 @@ import Color from 'colorjs.io';
 // Utils
 import useQueryParams from './utils/useQueryParams';
 import shadeFromContrast from './utils/shadeFromContrast';
+import toCssColor from './utils/toCssColor';
 import { sample } from 'lodash';
 
 // Components
@@ -30,17 +31,29 @@ const App = () => {
     : queryParams.color;
 
   let colorObj;
-  let colorHex;
+  let colorCss;
   let colorName;
-  let shade = "?"; 
+  let shade; 
+  let invalid = false;
 
   try {
     colorObj = new Color(colorValue).to("hsl");
-    colorHex = colorObj.to("srgb").toString({ format: "hex" });
+    colorCss = toCssColor(colorObj);
     colorName = getHueName(colorObj.to("hsl").coords[0]);
+    invalid = colorObj.alpha !== 1;
+  } catch {
+    invalid = true;
+  }
+
+  if(invalid) {
+    shade = "?";
+    document.body.style.backgroundColor = "black";
+  } else {
+    document.body.style.backgroundColor = colorCss;
     shade = Math.round(shadeFromContrast(colorObj.contrastWCAG21(black)));
-    document.body.style.backgroundColor = colorHex;
-  } catch {}
+  }
+
+  // console.log(colorObj.to("hsl").hsl)
 
   // If adding "#" makes it a valid hex, add it.
   useEffect(() => {
@@ -84,7 +97,7 @@ const App = () => {
               <Box.Cell className="flex-column gap-000">
                 <h2>How to use</h2>
                 <ul className="list-bulleted">
-                  <li>Use shades when naming colors (for example, "{colorName}{shade}").</li>
+                  <li>Use shades when naming colors (for example, "{invalid ? "green" : colorName}{invalid ? 100 : shade}").</li>
                   <li>Two colors with a difference of 100 or more have ≥ 4.5 contrast.</li>
                   <li>Two colors with a difference of 75 or more have ≥ 3.0 contrast.</li>
                 </ul>
@@ -94,7 +107,7 @@ const App = () => {
         </Box>
       </Header>
 
-    { colorObj && 
+    { !invalid && 
       <MoreShadesSection colorObj={colorObj} shade={shade} />
     }
 

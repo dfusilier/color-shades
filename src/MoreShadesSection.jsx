@@ -8,6 +8,7 @@ import suggestShades from './utils/suggestShades';
 import createInterpolants from './utils/createInterpolants';
 import shadeToContrast from './utils/shadeToContrast';
 import { uniq } from 'lodash';
+import toCssColor from './utils/toCssColor';
 
 // Components
 import Section from './components/Section';
@@ -47,7 +48,7 @@ const MoreShadesSection = ({ colorObj, shade }) => {
   }
 
   const shadeColors = getShadeColors(shades);
-  const shadeHexes = shadeColors.map(shade => shade.toString({ format: "hex" }));
+  const shadeHexes = shadeColors.map(shade => toCssColor(shade));
  
   return (
     <Section aria-labelledby="more-shades-heading">
@@ -98,12 +99,11 @@ const MoreShadesSection = ({ colorObj, shade }) => {
                   </Tooltip.Provider>
                   <Dialog.Portal>
                     <Dialog.Overlay 
-                      bg={new Color(
+                      bg={toCssColor(new Color(
                         "srgb",
                         getShadeColors([10])[0].coords,
                         0.96
-                      ).to("srgb").toString() 
-                        
+                      )) 
                     } />
                     <Dialog.Content>
                       <div>
@@ -113,7 +113,7 @@ const MoreShadesSection = ({ colorObj, shade }) => {
                         getShadeColors={getShadeColors}
                         onSave={shades => setQueryParams({
                           ...queryParams,
-                          color: colorObj.toString({ format: "hex" }),
+                          color: toCssColor(colorObj),
                           shades: shades.join("-")
                         })}
                       />
