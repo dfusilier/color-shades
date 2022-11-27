@@ -51,18 +51,6 @@ const App = () => {
       });
     } catch {}
   }, [colorObj, colorValue, setQueryParams]);
-
-  // If applying hBase and sBase result in a new
-  // hex, then update colorValue.
-  // useEffect(() => {
-  //   if (colorHex !== colorHexComparison) {
-  //     const omittedQueryParams = omit(queryParams, ["hBase", "sBase"]);
-  //     return setQueryParams({ 
-  //       ...omittedQueryParams,
-  //       color: colorHexComparison
-  //     });
-  //   }
-  // }, [colorHex, colorHexComparison, queryParams, setQueryParams]);
   
   return (
     <div className="App">
