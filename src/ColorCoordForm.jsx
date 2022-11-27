@@ -10,8 +10,6 @@ import { omit } from 'lodash';
 import Box from './components/Box';
 import ColorCoordInput from './components/ColorCoordInput';
 
-
-
 const ColorCoordForm = ({ color, coordType }) => {
   let [queryParams, setQueryParams, setThrottledQueryParams] = useQueryParams();
   color = color.to("hsl");
@@ -195,37 +193,7 @@ const hueTrackBackground = makeCssGradient(
   new Color("hsl", [ 0, 100, 50 ]), 
   new Color("hsl", [ 353, 100, 50 ]),
   { space: "hsl", hue: "longer" }
-)
-
-// const setValue = (color, coordType, coordPosition, value) => {
-//   let s = color.to("hsl").coords[1];
-//   if (coordType === "hue" && s === 0) {
-//     return {
-//       [`h${coordPosition}`]: value,
-//       [`s${coordPosition}`]: 5
-//     }
-//   } else {
-//     s = value;
-//     return {
-//       [`${coordVars[coordType].abbrev}${coordPosition}`]: value,
-//     }
-//   }
-// };
-
-// const setColor = (color, coordType, value) => {
-//   console.log(value)
-//   let [h, s, l] = color.to("hsl").coords;
-//   if (coordType === "hue") {
-//     h = value;
-//     s = s === 0 ? 5 : s;
-//   } else {
-//     s = value;
-//   }
-//   console.log({ h, s, l })
-//   const newColor = new Color("hsl", [h, s, l]);
-//   console.log(newColor.to("srgb").toString({ format: "hex" }))
-//   return newColor.to("srgb").toString({ format: "hex" });
-// };
+);
 
 const hslData = {
   h: {

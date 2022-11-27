@@ -57,6 +57,14 @@ const GlobalStyles = createGlobalStyle`
             --font-size-5: 5rem;
             --line-height-5: 1.0;
         }
+
+        padding-block: 1.5rem;
+        padding-inline: 1.5rem;
+
+        @media (min-width: 768px) {
+            padding-block: 3rem; 
+            padding-inline: 3rem; 
+        }
     }
 
     .type-size-00 {

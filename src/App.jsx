@@ -53,10 +53,10 @@ const App = () => {
   }, [colorObj, colorValue, setQueryParams]);
   
   return (
-    <div className="App">
+    <div className="App" style={{ minHeight: "100vh"}}>
       <GlobalStyles />
       <Header aria-labelledby="color-shades-heading">
-        <Box bg={"#161616"}>
+        <Box>
           <Box.Column>
             <Box.Cell className="flex-column gap-0">
               <TitleAndLink>
@@ -127,7 +127,7 @@ const Header = styled(Section)`
   align-items: center;
   & > * { width: 100%; }
   @media (min-width: 768px) {
-    min-height: calc(100vh - 2.5rem);
+    min-height: calc(100vh - 6rem - 1.5rem);
   }
 `
 
