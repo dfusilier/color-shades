@@ -16,6 +16,7 @@ const GlobalStyles = createGlobalStyle`
         --color-bg-tinted: rgba(255, 255, 255, 0.08);
         --color-fg: white;
         --color-fg-subdued: rgba(255, 255, 255, 0.65);
+        --color-fg-negative: firebrick;
         --color-fg-subdued-more: rgba(255, 255, 255, 0.55);
         --color-fg-subdued-non-text: rgba(255, 255, 255, 0.5);
         --color-fg-subdued-decorative: rgba(255, 255, 255, 0.04);
@@ -100,6 +101,9 @@ const GlobalStyles = createGlobalStyle`
 
     .color-fg-subdued {
         color: var(--color-fg-subdued);
+    }
+    .color-fg-negative {
+        color: var(--color-fg-negative);
     }
 
     .font-weight-bold {
@@ -257,6 +261,16 @@ const GlobalStyles = createGlobalStyle`
     
     fieldset {
         width: 100%;
+    }
+
+    .w-block {
+        width: 100%;
+    }
+
+    .screen-reader-only {
+        position: absolute !important;
+        top: -9999px !important;
+        left: -9999px !important;
     }
 
     @keyframes scaleIn {

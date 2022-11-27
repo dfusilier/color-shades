@@ -202,10 +202,10 @@ const MoreShadesSection = ({ colorObj, shade }) => {
               </Tabs.List>
 
                 <Tabs.Content className="TabsContent" value="hue" >
-                  <ColorCoordForm coordType={"hue"} color={colorObj} />
+                  <ColorCoordForm coordType={"h"} color={colorObj} />
                 </Tabs.Content>
                 <Tabs.Content className="TabsContent" value="saturation" >
-                  <ColorCoordForm coordType={"saturation"} color={colorObj} />
+                  <ColorCoordForm coordType={"s"} color={colorObj} />
                 </Tabs.Content>
             </Tabs.Root>
 

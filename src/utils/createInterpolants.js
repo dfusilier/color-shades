@@ -19,7 +19,7 @@ const createInterpolants = (color, hStart, hEnd, sStart, sEnd) => {
     } else if (hEnd) {
       hBase = hEnd 
     } else {
-      hBase = 0
+      hBase = 0;
     }
   }
 

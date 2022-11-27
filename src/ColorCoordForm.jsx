@@ -3,149 +3,164 @@ import useQueryParams from './utils/useQueryParams';
 import styled from "styled-components";
 import Color from 'colorjs.io';
 
+// Utils
+import { omit } from 'lodash';
+
 // Components
 import Box from './components/Box';
-import FormGroup from './components/FormGroup';
-import TextField from './components/TextField';
-import Slider from './components/Slider';
+import ColorCoordInput from './components/ColorCoordInput';
 
-const coordVars = {
-  hue: {
-    abbrev: "h",
-    index: 0,
-    min: 0,
-    max: 354
-  },
-  saturation: {
-    abbrev: "s",
-    index: 1,
-    min: 0,
-    max: 100
-  }
-}
+
 
 const ColorCoordForm = ({ color, coordType }) => {
   let [queryParams, setQueryParams, setThrottledQueryParams] = useQueryParams();
-  const { abbrev, index } = coordVars[coordType];
-  const coords = color.to("hsl").coords;
+  color = color.to("hsl");
 
-  const baseValue = handleValue(coords[index], {
-    ifUndefined: 0, 
-    ifNaN: 0,
-  });
+  // Notes: 
+  // – Null, "", 0, and "3" are all considered numbers.
+  // - Undefined and NaN are not considered numbers.
+  // – Grayscale colors will have a hBase that is NaN.
 
-  const startKey = `${abbrev}Start`;
-  const startUndefined = typeof queryParams[startKey] === "undefined";
-  const startValue = handleValue(queryParams[startKey], { 
-    ifUndefined: baseValue, 
-    ifNaN: 0 
-  });
+  // Variable notes:
+  // – "base" is the value used for calculation. 
+  // – "Values" are what display in fields. 
 
-  const endKey = `${abbrev}End`;
-  const endUndefined = typeof queryParams[endKey] === "undefined";
-  const endValue = handleValue(queryParams[endKey], { 
-    ifUndefined: baseValue, 
-    ifNaN: 0 
-  });
+  const h = getHslCoordData("h", color, queryParams);
+  const s = getHslCoordData("s", color, queryParams);
+  const coord = coordType === "h" ? h : s;
+  // const baseColorHex = color.to("srgb").toString({ format: "hex" });
 
-  const baseColorHex = color.to("srgb").toString({ format: "hex"});
-  
-  let startTrackBackground, baseTrackBackground, endTrackBackground;
-  
-  if(coordType === "saturation") {
-    
-    startTrackBackground = makeCssGradient(
-      new Color("hsl", [ queryParams.hStart || coords[0] || 0, 0, 50 ]),
-      new Color("hsl", [ queryParams.hStart || coords[0] || 0, 100, 50 ])
+  if (coordType === "s") {
+    coord.base.trackBackground = makeCssGradient(
+      new Color("hsl", [ h.base.calcValue, 0, 50 ]),
+      new Color("hsl", [ h.base.calcValue, 100, 50 ])
     );
-    baseTrackBackground = makeCssGradient(
-      new Color("hsl", [ coords[0] || 0, 0, 50 ]),
-      new Color("hsl", [ coords[0] || 0, 100, 50 ])
+    coord.start.trackBackground = makeCssGradient(
+      new Color("hsl", [ h.start.calcValue, 0, 50 ]),
+      new Color("hsl", [ h.start.calcValue, 100, 50 ])
     );
-    endTrackBackground = makeCssGradient(
-      new Color("hsl", [ queryParams.hEnd || coords[0] || 0, 0, 50 ]),
-      new Color("hsl", [ queryParams.hEnd || coords[0] || 0, 100, 50 ])
+    coord.end.trackBackground = makeCssGradient(
+      new Color("hsl", [ h.end.calcValue, 0, 50 ]),
+      new Color("hsl", [ h.end.calcValue, 100, 50 ])
     );
   } else {
-    startTrackBackground = hueTrackBackground;
-    baseTrackBackground = hueTrackBackground;
-    endTrackBackground = hueTrackBackground;
+    coord.base.trackBackground = hueTrackBackground;
+    coord.start.trackBackground = hueTrackBackground;
+    coord.end.trackBackground = hueTrackBackground;
   }
 
+  const handleInputChange = (queryKey, value, throttle = false) => {
+    let newQueryParams = {};
+    const colorHex = color.to("srgb").toString({ format: "hex" });
+
+    // If a coord for the base color changes, things 
+    // are simple. Otherwise, the color query parameter 
+    // may need to change too.
+    
+    if(queryKey !== "hBase" && queryKey !== "sBase") {
+
+      newQueryParams = { ...queryParams, color: colorHex, [queryKey]: value };
+
+    } else {
+
+      const colorNewCoords = queryKey === "hBase" 
+        ? [ value, s.base.calcValue, color.hsl.l ] 
+        : [ h.base.calcValue, value, color.hsl.l ];
+
+      const colorNew = new Color("hsl", colorNewCoords);
+      const colorNewHex = colorNew.to("srgb").toString({ format: "hex" });
+
+      if (colorHex === colorNewHex) {
+        newQueryParams = {
+          ...queryParams,
+          color: colorHex,
+          [queryKey]: value
+        }
+      } else {
+
+        newQueryParams = {
+          ...omit(queryParams, ["hBase", "sBase"]),
+          color: colorNewHex
+        }
+
+        const colorFromNewHex = new Color(colorNewHex).to("hsl");
+
+        if (colorFromNewHex.hsl.h !== colorNew.hsl.h) {
+          newQueryParams = {
+            ...newQueryParams,
+            hBase: colorNew.hsl.h
+          }
+        }
+        if (colorFromNewHex.hsl.s !== colorNew.hsl.s) {
+          newQueryParams = {
+            ...newQueryParams,
+            sBase: colorNew.hsl.s
+          }
+        }
+      }
+    }
+    return throttle 
+      ? setThrottledQueryParams(newQueryParams)
+      : setQueryParams(newQueryParams);
+  };
+  
   return(
     <Box.GridColumn>
     
       <CustomBoxCell className="flex-column flex-justify-center">
-        <Input
-          subdued={startUndefined}
-          id={`${coordType}-start-input`}
-          coordType={coordType}
+        <ColorCoordInput
           label="↑ Dark end"
-          value={startValue}
-          trackBackground={startTrackBackground}
-          onFieldChange={value => 
-            setQueryParams({
-              ...queryParams,
-              color: baseColorHex,
-              [startKey]: value
-            })
-          }
-          onSliderChange={value => 
-            setThrottledQueryParams({
-              ...queryParams,
-              color: baseColorHex,
-              [startKey]: value
-            })
-          }
+          value={coord.start.inputValue}
+          max={coord.max}
+          subduedField={coord.start.inputValueIsFallback}
+          trackBackground={coord.start.trackBackground}
+          onFieldChange={value => handleInputChange(
+            coord.start.queryKey,
+            value
+          )}
+          onSliderChange={value => handleInputChange(
+            coord.start.queryKey,
+            value,
+            true
+          )}
         />
       </CustomBoxCell>
 
       <CustomBoxCell className="flex-column flex-justify-center flex-fill-y">
-        <Input
-          id={`${coordType}-base-input`}
-          coordType={coordType}
+        <ColorCoordInput
           label="★ Base color"
-          value={baseValue}
-          trackBackground={baseTrackBackground}
-          onFieldChange={value => setQueryParams({
-            ...queryParams,
-            color: color.set({ 
-                [`hsl.${abbrev}`]: value
-              })
-              .to("srgb").toString({ format: "hex" })
-          })}
-          onSliderChange={value => setThrottledQueryParams({
-            ...queryParams,
-            color: color.set({ 
-                [`hsl.${abbrev}`]: value
-              })
-              .to("srgb").toString({ format: "hex" })
-          })}
+          value={coord.base.inputValue}
+          max={coord.max}
+          subduedField={coord.base.inputValueIsFallback}
+          trackBackground={coord.base.trackBackground}
+          onFieldChange={value => handleInputChange(
+            coord.base.queryKey,
+            value
+          )}
+          onSliderChange={value => handleInputChange(
+            coord.base.queryKey,
+            value,
+            true
+          )}
         />
       </CustomBoxCell>
 
       <CustomBoxCell className="flex-column flex-justify-center flex-fill-y">
-        <Input
-          subdued={endUndefined}
-          id={`${coordType}-end-input`}
-          coordType={coordType}
+        <ColorCoordInput
           label="↓ Light end"
-          value={endValue}
-          trackBackground={endTrackBackground}
-          onFieldChange={value => 
-            setQueryParams({
-              ...queryParams,
-              color: baseColorHex,
-              [endKey]: value
-            })
-          }
-          onSliderChange={value => 
-            setThrottledQueryParams({
-              ...queryParams,
-              color: baseColorHex,
-              [endKey]: value
-            })
-          }
+          value={coord.end.inputValue}
+          max={coord.max}
+          subduedField={coord.end.inputValueIsFallback}
+          trackBackground={coord.end.trackBackground}
+          onFieldChange={value => handleInputChange(
+            coord.end.queryKey,
+            value
+          )}
+          onSliderChange={value => handleInputChange(
+            coord.end.queryKey,
+            value,
+            true
+          )}
         />
       </CustomBoxCell>
 
@@ -163,55 +178,6 @@ const CustomBoxCell = styled(Box.Cell)`
     padding-block-start: 1.25rem;
   }
 `
-
-const Input = ({ 
-  id,
-  coordType, 
-  label, 
-  value, 
-  onFieldChange,
-  onSliderChange,
-  trackBackground,
-  subdued = false
-}) => {
-  const { min, max } = coordVars[coordType];
-  
-  return(
-    <div className="flex-column gap-1">
-      <FormGroup>
-        <label htmlFor={id}>{label}</label>
-        <TextField 
-          subdued={subdued}
-          className="type-size-0"
-          id={id}
-          name={id}
-          type="number" 
-          step="1"
-          min={min}
-          max={max}
-          value={value}
-          onChange={e => onFieldChange(e.target.value)}
-        />
-      </FormGroup>
-
-      <Slider.Root 
-        className="SliderRoot" 
-        value={[value]} 
-        min={min} 
-        max={max} 
-        step={1} 
-        aria-label={label}
-        onValueChange={value => onSliderChange(value)}
-      >
-        <Slider.Track className="SliderTrack" background={trackBackground}>
-          <Slider.Range className="SliderRange" />
-        </Slider.Track>
-        <Slider.Thumb className="SliderThumb" />
-      </Slider.Root>
-    </div>
-  );
-}
-
 export default ColorCoordForm;
 
 const makeCssGradient = (c1, c2, opts = { space: "hsl" }) => {
@@ -228,12 +194,73 @@ const hueTrackBackground = makeCssGradient(
   { space: "hsl", hue: "longer" }
 )
 
-const handleValue = (value, { ifUndefined, ifNaN }) => {
-  if (typeof value === "undefined") {
-    return ifUndefined;
-  } 
-  if (Number.isNaN(value)) {
-    return ifNaN;
-  } 
-  return Math.round(value);
+// const setValue = (color, coordType, coordPosition, value) => {
+//   let s = color.to("hsl").coords[1];
+//   if (coordType === "hue" && s === 0) {
+//     return {
+//       [`h${coordPosition}`]: value,
+//       [`s${coordPosition}`]: 5
+//     }
+//   } else {
+//     s = value;
+//     return {
+//       [`${coordVars[coordType].abbrev}${coordPosition}`]: value,
+//     }
+//   }
+// };
+
+// const setColor = (color, coordType, value) => {
+//   console.log(value)
+//   let [h, s, l] = color.to("hsl").coords;
+//   if (coordType === "hue") {
+//     h = value;
+//     s = s === 0 ? 5 : s;
+//   } else {
+//     s = value;
+//   }
+//   console.log({ h, s, l })
+//   const newColor = new Color("hsl", [h, s, l]);
+//   console.log(newColor.to("srgb").toString({ format: "hex" }))
+//   return newColor.to("srgb").toString({ format: "hex" });
+// };
+
+const hslData = {
+  h: {
+    name: "hue",
+    min: 0,
+    max: 360
+  },
+  s: {
+    name: "saturation",
+    min: 0,
+    max: 100
+  }
+}
+
+const getHslCoordData = (coordKey, color, queryParams) => {
+  const { min, max, name } = hslData[coordKey];
+  
+  const base = {};
+  base.queryKey = `${coordKey}Base`;
+  base.queryValue = queryParams[base.queryKey];
+  base.colorValue = color.hsl[coordKey];
+  base.calcValue = base.queryValue || base.colorValue || min;
+  base.inputValue = isNaN(base.queryValue) ? base.colorValue : base.queryValue;
+  base.inputValueIsFallback = !base.queryValue && !base.colorValue;
+
+  const start = {};
+  start.queryKey = `${coordKey}Start`;
+  start.queryValue = queryParams[start.queryKey];
+  start.calcValue = start.queryValue || base.colorValue;
+  start.inputValue = isNaN(start.queryValue) ? base.inputValue : start.queryValue;
+  start.inputValueIsFallback = !start.queryValue;
+
+  const end = {};
+  end.queryKey = `${coordKey}End`;
+  end.queryValue = queryParams[end.queryKey];
+  end.calcValue = end.queryValue || base.colorValue;
+  end.inputValue = isNaN(end.queryValue) ? base.inputValue : end.queryValue;
+  end.inputValueIsFallback = !end.queryValue;
+
+  return { name, min, max, start, base, end };
 }

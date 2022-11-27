@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from "styled-components";
 import Color from 'colorjs.io';
 
@@ -11,9 +11,9 @@ import { sample } from 'lodash';
 import GlobalStyles from './GlobalStyles';
 import Section from './components/Section';
 import Box from './components/Box';
-import TextField from './components/TextField';
-import ColorPicker from './components/ColorPicker'; 
 import MoreShadesSection from './MoreShadesSection';
+import ColorInput from './components/ColorInput';
+import getHueName from './utils/getHueName';
 
 const App = () => {
   let [
@@ -25,45 +25,48 @@ const App = () => {
   // Undefined is returned when there's no color query.
   // Null when there's a blank color query,
   // which happens when someone clears the field.
-  let color = typeof queryParams.color === "undefined"
+  let colorValue = typeof queryParams.color === "undefined"
     ? sample(colorDefaults)
     : queryParams.color;
 
   let colorObj;
+  let colorHex;
   let colorName;
+  let shade = "?"; 
+
   try {
-    colorObj = new Color(color);
-    const hue = colorObj.to("hsl").coords[0];
-    colorName = Number.isNaN(hue)
-      ? "gray"
-      : hueRanges.find(hueRange => 
-        hueRange.min <= hue && hue <= hueRange.max
-      ).hueName;
-    if(colorName === "black" || colorName === "white") {
-      colorName = "neutral";
-    }
-  } catch {
+    colorObj = new Color(colorValue).to("hsl");
+    colorHex = colorObj.to("srgb").toString({ format: "hex" });
+    colorName = getHueName(colorObj.to("hsl").coords[0]);
+    shade = Math.round(shadeFromContrast(colorObj.contrastWCAG21(black)));
+    document.body.style.backgroundColor = colorHex;
+  } catch {}
+
+  // If adding "#" makes it a valid hex, add it.
+  useEffect(() => {
     try {
-      new Color("#" + color);
+      new Color("#" + colorValue);
       setQueryParams({ 
-        color: "#" + color
+        color: "#" + colorValue
       });
-    } catch {
-      console.log("catch", color);
-    }
-  }
+    } catch {}
+  }, [colorObj, colorValue, setQueryParams]);
 
-  const shade = colorObj ? Math.round(
-    shadeFromContrast(colorObj.contrastWCAG21(black))
-  ) : "?";
+  // If applying hBase and sBase result in a new
+  // hex, then update colorValue.
+  // useEffect(() => {
+  //   if (colorHex !== colorHexComparison) {
+  //     const omittedQueryParams = omit(queryParams, ["hBase", "sBase"]);
+  //     return setQueryParams({ 
+  //       ...omittedQueryParams,
+  //       color: colorHexComparison
+  //     });
+  //   }
+  // }, [colorHex, colorHexComparison, queryParams, setQueryParams]);
   
-  if (colorObj) {
-    document.body.style.backgroundColor = color;
-  }
-
   return (
     <div className="App">
-      <GlobalStyles bg={colorObj ? color : undefined} />
+      <GlobalStyles />
       <Header aria-labelledby="color-shades-heading">
         <Box bg={"#161616"}>
           <Box.Column>
@@ -75,29 +78,15 @@ const App = () => {
               <p className="type-size-1">Calculate a color's shade and use it to quickly determine color contrast.</p>
             </Box.Cell>
             <Box.Cell>
-              <fieldset className="stack-00">
-                <legend>Color</legend>
-                <div className="flex-row gap-1" style={{ alignItems: "end", marginBlockEnd: "8px"}}>
-                  <TextField 
-                    block
-                    className="type-size-2"
-                    aria-label="Enter color"
-                    id="color-input" 
-                    name="color-input"
-                    type="text" 
-                    value={color}
-                    onChange={e => setQueryParams({ 
-                      color: e.target.value
-                    }, 0)} 
-                  />
-                  <ColorPicker 
-                    aria-label="Edit color"
-                    value={colorObj ? color : "#000000"} 
-                    onChange={e => setThrottledQueryParams({ color: e.target.value })}
-                    bg={colorObj ? color : "#000000"} 
-                  />
-                </div>
-              </fieldset>
+              <ColorInput
+                value={colorValue}
+                onFieldChange={e => setQueryParams({ 
+                  color: e.target.value
+                })}
+                onPickerChange={e => setThrottledQueryParams({ 
+                  color: e.target.value
+                })}
+              />
             </Box.Cell>
             <Box.ResponsiveRow>
               <Box.Cell className="flex-column flex-fit-x gap-000">
@@ -168,45 +157,3 @@ const TitleAndLink = styled.div`
   }
 `
 
-const hueRanges = [
-  {
-    min: 0,
-    max: 11,
-    hueName: "red"
-  },
-  {
-    min: 11,
-    max: 40,
-    hueName: "orange"
-  },
-  {
-    min: 40,
-    max: 77,
-    hueName: "yellow"
-  },
-  {
-    min: 77,
-    max: 167,
-    hueName: "green"
-  },
-  {
-    min: 167,
-    max: 248,
-    hueName: "blue"
-  },
-  {
-    min: 248,
-    max: 280,
-    hueName: "purple"
-  },
-  {
-    min: 280,
-    max: 335,
-    hueName: "pink"
-  },
-  {
-    min: 335,
-    max: 360,
-    hueName: "red"
-  }
-]
