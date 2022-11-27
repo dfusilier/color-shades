@@ -112,6 +112,7 @@ const ColorCoordForm = ({ color, coordType }) => {
           label="↑ Dark end"
           value={coord.start.inputValue}
           max={coord.max}
+          minMaxField={false}
           subduedField={coord.start.inputValueIsFallback}
           trackBackground={coord.start.trackBackground}
           onFieldChange={value => handleInputChange(
@@ -131,6 +132,7 @@ const ColorCoordForm = ({ color, coordType }) => {
           label="★ Base color"
           value={coord.base.inputValue}
           max={coord.max}
+          minMaxField={false}
           subduedField={coord.base.inputValueIsFallback}
           trackBackground={coord.base.trackBackground}
           onFieldChange={value => handleInputChange(
@@ -150,6 +152,7 @@ const ColorCoordForm = ({ color, coordType }) => {
           label="↓ Light end"
           value={coord.end.inputValue}
           max={coord.max}
+          minMaxField={false}
           subduedField={coord.end.inputValueIsFallback}
           trackBackground={coord.end.trackBackground}
           onFieldChange={value => handleInputChange(
@@ -239,30 +242,25 @@ const hslData = {
 
 const getHslCoordData = (coordKey, color, queryParams) => {
   const { min, max, name } = hslData[coordKey];
-  const minMax = v => {
-    if (v < min) { return min; }
-    if (v > max) { return max; }
-    return v;
-  }
   const base = {};
   base.queryKey = `${coordKey}Base`;
   base.queryValue = queryParams[base.queryKey];
   base.colorValue = color.hsl[coordKey];
-  base.calcValue = minMax(base.queryValue || base.colorValue || min);
-  base.inputValue = isNaN(base.queryValue) ? base.colorValue : base.queryValue;
+  base.calcValue = base.queryValue || base.colorValue || min;
+  base.inputValue = isNaN(base.queryValue) ? base.calcValue : base.queryValue;
   base.inputValueIsFallback = !base.queryValue && !base.colorValue;
 
   const start = {};
   start.queryKey = `${coordKey}Start`;
   start.queryValue = queryParams[start.queryKey];
-  start.calcValue = minMax(start.queryValue || base.colorValue);
+  start.calcValue = start.queryValue || base.calcValue;
   start.inputValue = isNaN(start.queryValue) ? base.inputValue : start.queryValue;
   start.inputValueIsFallback = !start.queryValue;
 
   const end = {};
   end.queryKey = `${coordKey}End`;
   end.queryValue = queryParams[end.queryKey];
-  end.calcValue = minMax(end.queryValue || base.colorValue);
+  end.calcValue = end.queryValue || base.calcValue;
   end.inputValue = isNaN(end.queryValue) ? base.inputValue : end.queryValue;
   end.inputValueIsFallback = !end.queryValue;
 

@@ -4,8 +4,9 @@ const InputLabel = styled.label`
     position: relative;
     width: 100%;
     
-    input {
-        margin-top: 0.5rem;
+    & > *:first-child {
+        display: block;
+        margin-bottom: 0.5rem;
     }
 `
 

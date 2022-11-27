@@ -2,7 +2,7 @@
 import InputLabel from './InputLabel';
 import TextField from './TextField';
 import Slider from './Slider';
-import InputError from './InputError';
+// import InputError from './InputError';
 
 const ColorCoordInput = ({ 
   label,
@@ -15,62 +15,38 @@ const ColorCoordInput = ({
   trackBackground = "transparent",
   subduedField = false
 }) => {
-  let fieldValue;
-  let sliderValue;
-  let underMin = false;
-  let overMax = false;
-  let invalid = false;
 
-  if (value === "") {
-    fieldValue = value;
-    sliderValue = min;
-  } else if (typeof value === "undefined") {
-    fieldValue = min;
-    sliderValue = min;
-  } else if (Number.isNaN(value)) {
-    fieldValue = min;
-    sliderValue = min;
-  } else if (isNaN(value)) {
-    fieldValue = min;
-    sliderValue = min;
-  } else {
-    value = Math.round(value);
-    underMin = value < min;
-    overMax = value > max;
-    invalid = underMin || overMax;
-    fieldValue = value;
-    sliderValue = value;
-    if (underMin) { sliderValue = min; } 
-    if (overMax) { sliderValue = max; } 
-  }
+  const minMax = v => {
+    if (v < min) { return min; }
+    if (v > max) { return max; }
+    return v;
+  };
   
   return(
     <div className="flex-column gap-1">
       <InputLabel>
-        {label}
+        <span>{label}</span>
         <TextField 
           className="type-size-0"
           type="number" 
-          value={fieldValue}
-          min={min}
-          max={max}
+          value={value}
           step={step}
-          aria-invalid={invalid}
+          // aria-invalid={invalid}
           block
           subdued={subduedField}
           onChange={e => onFieldChange(e.target.value)}
         />
-        { underMin && 
+        {/* { underMin && minMaxField &&
           <InputError className="w-block">Min is {min}</InputError>
         }
-        { overMax && 
+        { overMax && minMaxField &&
           <InputError className="w-block">Max is {max}.</InputError>
-        }
+        } */}
       </InputLabel>
 
       <Slider.Root 
         className="SliderRoot" 
-        value={[sliderValue]} 
+        value={[minMax(value)]} 
         min={min} 
         max={max} 
         step={1} 
