@@ -221,8 +221,9 @@ export default MoreShadesSection;
 const PaletteAndTabs = styled(Box.Row)`
   display: grid;
   grid-template-columns: 3fr 2fr;
-  min-height: 68vh;
+  min-height: calc(100vh - 10rem);
   @media (min-width: 768px) {
+    min-height: calc(100vh - 12rem);
     grid-template-columns: 3fr 1fr;
   }
 `

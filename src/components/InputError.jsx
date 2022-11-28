@@ -10,7 +10,7 @@ const Container = styled.span`
   gap: 0.375rem;
   background: var(--color-fg);
   padding-block: 0.5rem;
-  padding-inline-start: 0.75rem;
+  padding-inline-start: 0.65rem;
   padding-inline-end: 1rem;
   position: absolute;
   z-index: 5;
@@ -27,7 +27,7 @@ const Container = styled.span`
     height: 0;
     top: -0.375rem;
     border-left: 0.65rem solid transparent;
-    border-right: 0.66rem solid transparent;
+    border-right: 0.65rem solid transparent;
     border-bottom: 0.75rem solid white;
   }
 `;

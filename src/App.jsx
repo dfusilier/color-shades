@@ -78,22 +78,21 @@ const App = () => {
   // after a set amount of time.
   useEffect(() => {
     setShowErrors(false);
-    if (error) {
+    if (error && colorValue.length > 2) {
       setTimeout(() => setShowErrors(true), 1500);
     }
   }, [error, colorValue]);
 
   if (error) {
-    shade = "?";
+    shade = "✕";
     colorCss = "#000000";
     colorName = "green";
   } else {
     shade = Math.round(shadeFromContrast(colorObj.contrastWCAG21(black)));
     colorCss = toCssColor(colorObj);
     colorName = getHueName(colorObj.to("hsl").coords[0]);
+    document.body.style.backgroundColor = colorCss;
   }
-
-  document.body.style.backgroundColor = colorCss;
   
   return (
     <div className="App" style={{ minHeight: "100vh"}}>
@@ -125,7 +124,10 @@ const App = () => {
             <Box.ResponsiveRow>
               <Box.Cell className="flex-column flex-fit-x gap-000">
                 <h2 style={{whiteSpace: "nowrap"}}>Shade (0–200)</h2>
-                <div className="type-size-5">{shade}</div>
+                <div 
+                  className={error ? `opacity-disabled type-size-5` : `type-size-5`}
+                  aria-label={error ? "None" : undefined}
+                >{shade}</div>
               </Box.Cell>
               <Box.Cell className="flex-column gap-000">
                 <h2>How to use</h2>

@@ -3,7 +3,7 @@ import styled from "styled-components";
 const Section = styled.section`
   box-sizing: border-box;
   margin: auto;
-  max-width: 864px;
+  max-width: 46rem;
 
   &:not(:first-child) {
     margin-block-start: 1.5rem;

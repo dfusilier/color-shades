@@ -20,6 +20,7 @@ const GlobalStyles = createGlobalStyle`
         --color-fg-subdued-more: rgba(255, 255, 255, 0.55);
         --color-fg-subdued-non-text: rgba(255, 255, 255, 0.5);
         --color-fg-subdued-decorative: rgba(255, 255, 255, 0.04);
+        --opacity-disabled: 0.35;
 
         --font-size-00: 0.75rem;
         --line-height-00: 1.5;
@@ -110,6 +111,11 @@ const GlobalStyles = createGlobalStyle`
     .color-fg-subdued {
         color: var(--color-fg-subdued);
     }
+
+    .opacity-disabled {
+       opacity: var(--opacity-disabled);
+    }
+
     .color-fg-negative {
         color: var(--color-fg-negative);
     }
