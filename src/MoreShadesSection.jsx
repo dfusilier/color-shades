@@ -7,7 +7,7 @@ import useQueryParams from './utils/useQueryParams';
 import suggestShades from './utils/suggestShades';
 import createInterpolants from './utils/createInterpolants';
 import shadeToContrast from './utils/shadeToContrast';
-import { uniq } from 'lodash';
+import { uniq, without } from 'lodash';
 import toCssColor from './utils/toCssColor';
 
 // Components
@@ -28,9 +28,13 @@ const MoreShadesSection = ({ colorObj, shade }) => {
   let [openCopyTooltip, setOpenCopyTooltip ] = useState(false);
   let [copied, setCopied ] = useState(false);
 
-  const shades = queryParams.shades 
+  const otherShades = uniq(
+    queryParams.shades 
     ? queryParams.shades.split('-').map(thisShade => parseInt(thisShade))
-    : uniq([10, 25, 50, 75, 100, 125, 150, 175, shade]).sort((a, b) => a - b);
+    : [10, 25, 50, 75, 100, 125, 150, 175 ]
+  ).sort((a, b) => a - b);
+
+  const shades = uniq([...otherShades, shade]).sort((a, b) => a - b);
   
   const { setLightness } = createInterpolants(
     colorObj,
@@ -114,7 +118,7 @@ const MoreShadesSection = ({ colorObj, shade }) => {
                         onSave={shades => setQueryParams({
                           ...queryParams,
                           color: toCssColor(colorObj),
-                          shades: shades.join("-")
+                          shades: without(shades, shade).join("-")
                         })}
                       />
                       </div>

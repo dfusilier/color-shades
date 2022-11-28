@@ -125,7 +125,7 @@ const ChipButton = styled.button`
   transition: box-shadow 0.075s ease-out;
   &:focus {
     outline: none; 
-    box-shadow: 0 0 0 3px var(--color-fg);
+    box-shadow: 0 0 0 3px currentColor;
     transition: box-shadow 0.1s ease-out; 
   }
 `
