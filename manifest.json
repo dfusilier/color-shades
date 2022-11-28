@@ -1,6 +1,13 @@
 {
   "short_name": "Color shades",
   "name": "Color shades",
+  "icons": [
+    {
+      "src": "favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    }
+  ],
   "author": "David Fusilier",
   "description": "Calculate a color's shade and use it to quickly determine color contrast.",
   "start_url": ".",
