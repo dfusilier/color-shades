@@ -34,7 +34,10 @@
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
 
-    gtag('config', 'G-6PDEHLHKNQ');
+    gtag('config', 'G-6PDEHLHKNQ', {
+      cookie_domain: 'dfusilier.github.io',
+      cookie_flags: 'SameSite=None;Secure',
+    });
   </script>
 
   <body>
