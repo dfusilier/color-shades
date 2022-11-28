@@ -65,6 +65,12 @@ const ColorCoordForm = ({ color, coordType }) => {
       return setQueryParams(newQueryParams);
     } 
 
+    // Allow blank field
+    if(value === "") {
+      newQueryParams[queryKey] = value;
+      return setQueryParams(newQueryParams);
+    } 
+
     // Otherwise, things are a little more complicated.
     // Changing hBase or sBase will create a new color.
     const colorNewCoords = queryKey === "hBase" 
