@@ -44,7 +44,7 @@ const GlobalStyles = createGlobalStyle`
         
         background: var(--color-bg);
         color: var(--color-fg);
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+        font-family: -apple-system, Helvetica, Arial, sans-serif;
         font-size: var(--font-size-0);
         line-height: var(--line-height-0);
         padding: 0;

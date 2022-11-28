@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from "styled-components";
 import Color from 'colorjs.io';
 
@@ -16,12 +16,19 @@ import MoreShadesSection from './MoreShadesSection';
 import ColorInput from './components/ColorInput';
 import getHueName from './utils/getHueName';
 
+const supportedColorSpaces = [
+  "srgb", 
+  "hsl", 
+  "lch", 
+  "hwb", 
+  "hsv",
+  "rgb",
+  "rgba"
+];
+
 const App = () => {
-  let [
-    queryParams, 
-    setQueryParams,
-    setThrottledQueryParams,
-  ] = useQueryParams();
+  let [ queryParams,  setQueryParams, setThrottledQueryParams ] = useQueryParams();
+  let [ showErrors, setShowErrors ] = useState(false);
 
   // Undefined is returned when there's no color query.
   // Null when there's a blank color query,
@@ -30,30 +37,22 @@ const App = () => {
     ? sample(colorDefaults)
     : queryParams.color;
 
-  let colorObj;
+  let colorObj; 
+  let isTransparent = false;
+  let isNotSupportedColorSpace = false;
+  let isNotColor = false;
+  let shade; 
   let colorCss;
   let colorName;
-  let shade; 
-  let invalid = false;
 
   try {
-    colorObj = new Color(colorValue).to("hsl");
-    colorCss = toCssColor(colorObj);
-    colorName = getHueName(colorObj.to("hsl").coords[0]);
-    invalid = colorObj.alpha !== 1;
+    colorObj = new Color(colorValue);
+    isNotSupportedColorSpace = !supportedColorSpaces.find(space => space === colorObj.space.id);
+    isTransparent = colorObj.alpha !== 1;
+    colorObj = colorObj.to("hsl");
   } catch {
-    invalid = true;
+    isNotColor = true;
   }
-
-  if(invalid) {
-    shade = "?";
-    document.body.style.backgroundColor = "black";
-  } else {
-    document.body.style.backgroundColor = colorCss;
-    shade = Math.round(shadeFromContrast(colorObj.contrastWCAG21(black)));
-  }
-
-  // console.log(colorObj.to("hsl").hsl)
 
   // If adding "#" makes it a valid hex, add it.
   useEffect(() => {
@@ -64,6 +63,37 @@ const App = () => {
       });
     } catch {}
   }, [colorObj, colorValue, setQueryParams]);
+
+  const error = isNotColor || isNotSupportedColorSpace || isTransparent;
+  const errorMessage = 
+    isNotColor 
+      ? "Enter a valid CSS color."
+      : isNotSupportedColorSpace 
+        ? "Sorry, that color space isn't supported."
+        : isTransparent 
+          ? "Shades don't work with transparent colors."
+          : undefined;
+
+  // Show errors if they aren't corrected
+  // after a set amount of time.
+  useEffect(() => {
+    setShowErrors(false);
+    if (error) {
+      setTimeout(() => setShowErrors(true), 1500);
+    }
+  }, [error, colorValue]);
+
+  if (error) {
+    shade = "?";
+    colorCss = "#000000";
+    colorName = "green";
+  } else {
+    shade = Math.round(shadeFromContrast(colorObj.contrastWCAG21(black)));
+    colorCss = toCssColor(colorObj);
+    colorName = getHueName(colorObj.to("hsl").coords[0]);
+  }
+
+  document.body.style.backgroundColor = colorCss;
   
   return (
     <div className="App" style={{ minHeight: "100vh"}}>
@@ -81,6 +111,9 @@ const App = () => {
             <Box.Cell>
               <ColorInput
                 value={colorValue}
+                valuePicker={colorCss}
+                error={showErrors && error}
+                errorMessage={showErrors && errorMessage}
                 onFieldChange={e => setQueryParams({ 
                   color: e.target.value
                 })}
@@ -97,7 +130,7 @@ const App = () => {
               <Box.Cell className="flex-column gap-000">
                 <h2>How to use</h2>
                 <ul className="list-bulleted">
-                  <li>Use shades when naming colors (for example, "{invalid ? "green" : colorName}{invalid ? 100 : shade}").</li>
+                  <li>Use shades when naming colors (for example, "{colorName}{error ? 100 : shade}").</li>
                   <li>Two colors with a difference of 100 or more have ≥ 4.5 contrast.</li>
                   <li>Two colors with a difference of 75 or more have ≥ 3.0 contrast.</li>
                 </ul>
@@ -107,7 +140,7 @@ const App = () => {
         </Box>
       </Header>
 
-    { !invalid && 
+    { !error && 
       <MoreShadesSection colorObj={colorObj} shade={shade} />
     }
 

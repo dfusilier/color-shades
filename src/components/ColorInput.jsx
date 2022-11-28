@@ -1,9 +1,8 @@
-import { useState, useEffect } from 'react';
-import Color from 'colorjs.io';
 
+// Utils
 import formatHex from '../utils/formatHex';
-import toCssColor from '../utils/toCssColor';
 
+// Components
 import TextField from './TextField';
 import ColorPicker from './ColorPicker'; 
 import InputLabel from './InputLabel';
@@ -11,38 +10,14 @@ import InputError from './InputError';
 
 const ColorInput = ({ 
   value, 
+  valuePicker,
+  error,
+  errorMessage,
   className,
   onFieldChange, 
   onPickerChange,
   ...otherProps
 }) => {
-
-  let [ showErrors, setShowErrors ] = useState(false);
-
-  let colorObj; 
-  let invalid = false;
-  let isTransparent = false;
-
-  try {
-    colorObj = new Color(value);
-    isTransparent = colorObj.alpha !== 1;
-    invalid = isTransparent;
-  } catch {
-    invalid = true;
-  }
-
-  const pickerValue = invalid 
-    ? "#000000" 
-    : formatHex(toCssColor(colorObj));
-
-  // Show errors if they aren't corrected
-  // after a set amount of time.
-  useEffect(() => {
-    setShowErrors(false);
-    if(invalid) {
-      setTimeout(() => setShowErrors(true), 3000);
-    }
-  }, [invalid, value]);
 
   return(
     <fieldset className={"stack-00 " + className} {...otherProps}>
@@ -56,22 +31,18 @@ const ColorInput = ({
             className="type-size-2"
             type="text" 
             value={value}
-            aria-invalid={invalid}
+            aria-invalid={error}
             onChange={onFieldChange} 
           />
-          { isTransparent && showErrors &&
-            <InputError>Shades don't work with transparent colors.</InputError>
-          }
-          { invalid && !isTransparent && showErrors &&
-            <InputError>Enter a valid CSS color.</InputError>
+          { error && errorMessage &&
+            <InputError>{errorMessage}</InputError>
           }
         </InputLabel>
         
         <ColorPicker 
           aria-label="Edit color"
-          value={pickerValue} 
+          value={formatHex(valuePicker || value)} 
           onChange={onPickerChange}
-          bg={pickerValue} 
         />
       </div>
     </fieldset>

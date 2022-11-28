@@ -3,7 +3,7 @@ import styled from "styled-components";
 const ColorPicker = styled.input.attrs(props => ({
     type: "color",
     style: {
-        background: props.bg
+        background: props.value
     }
 }))`
     flex-shrink: 0;
