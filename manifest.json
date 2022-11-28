@@ -1,8 +1,10 @@
 {
   "short_name": "Color shades",
   "name": "Color shades",
+  "author": "David Fusilier",
+  "description": "Calculate a color's shade and use it to quickly determine color contrast.",
   "start_url": ".",
   "display": "standalone",
-  "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "theme_color": "#ffffff",
+  "background_color": "#161616"
 }
