@@ -113,6 +113,7 @@ const ColorCoordForm = ({ color, coordType }) => {
         <ColorCoordInput
           label="↑ Dark end"
           value={coord.start.inputValue}
+          placeholder={coord.base.inputValue}
           max={coord.max}
           minMaxField={false}
           subduedField={coord.start.inputValueIsFallback}
@@ -153,6 +154,7 @@ const ColorCoordForm = ({ color, coordType }) => {
         <ColorCoordInput
           label="↓ Light end"
           value={coord.end.inputValue}
+          placeholder={coord.base.inputValue}
           max={coord.max}
           minMaxField={false}
           subduedField={coord.end.inputValueIsFallback}

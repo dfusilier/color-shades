@@ -7,6 +7,7 @@ import InputError from './InputError';
 const ColorCoordInput = ({ 
   label,
   value, 
+  placeholder,
   min = 0,
   max = 200,
   step = 1,
@@ -35,6 +36,7 @@ const ColorCoordInput = ({
           className="type-size-0"
           type="number" 
           value={value}
+          placeholder={placeholder}
           step={step}
           aria-invalid={invalid}
           block
