@@ -38,10 +38,10 @@ const MoreShadesSection = ({ colorObj, shade }) => {
   
   const { setLightness } = createInterpolants(
     colorObj,
-    queryParams.hStart,
-    queryParams.hEnd,
-    queryParams.sStart,
-    queryParams.sEnd,
+    queryParams.hStart === "" ? undefined : queryParams.hStart,
+    queryParams.hEnd === "" ? undefined : queryParams.hEnd,
+    queryParams.sStart === "" ? undefined : queryParams.sStart,
+    queryParams.sEnd === "" ? undefined : queryParams.sEnd,
   );
 
   const getShadeColors = shades => {
