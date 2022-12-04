@@ -11,6 +11,9 @@ const TextField = styled.input.attrs(props => ({
     padding: 8px 12px;
     font-size: inherit;
     line-height: inherit;
+    &::placeholder: {
+        color: var(--color-fg-subdued-more);
+    }
     ${props => props.block && `width: 100%`};
     transition: box-shadow 0.075s ease-out;
     &:focus {

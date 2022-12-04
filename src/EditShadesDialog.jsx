@@ -73,6 +73,7 @@ const EditShadesDialog = ({ shade, shades, getShadeColors, onSave }) => {
                 <TextField 
                   block
                   aria-label="New shade"
+                  placeholder="0–200"
                   type="number" 
                   value={newShade}
                   aria-invalid={invalid}
@@ -88,10 +89,10 @@ const EditShadesDialog = ({ shade, shades, getShadeColors, onSave }) => {
                   step={1}
                 />
                 { underMin &&
-                  <InputError className="w-block">Shade must be {min} or lighter.</InputError>
+                  <InputError className="w-block">Shade must be greater than {min}, which is black.</InputError>
                 }
                 { overMax  &&
-                  <InputError className="w-block">Shade must be {max} or darker.</InputError>
+                  <InputError className="w-block">Shade must be less than {max}, which is white.</InputError>
                 }
             </InputLabel>
             
