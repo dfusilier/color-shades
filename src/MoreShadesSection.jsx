@@ -70,20 +70,22 @@ const MoreShadesSection = ({ colorObj, shade }) => {
                         <Tooltip.Trigger 
                           asChild
                           onFocus={e => {
-                            e.preventDefault()
-                            setOpenEditShadesTooltip(true)
+                            e.preventDefault();
+                            setOpenEditShadesTooltip(true);
+                            setOpenCopyTooltip(false);
                           }}
                           onBlur={e => {
-                            e.preventDefault()
-                            setOpenEditShadesTooltip(false)
+                            e.preventDefault();
+                            setOpenEditShadesTooltip(false);
                           }}
                           onMouseEnter={e => {
-                            e.preventDefault()
-                            setOpenEditShadesTooltip(true)
+                            e.preventDefault();
+                            setOpenEditShadesTooltip(true);
+                            setOpenCopyTooltip(false);
                           }}
                           onMouseLeave={e => {
-                            e.preventDefault()
-                            setOpenEditShadesTooltip(false)
+                            e.preventDefault();
+                            setOpenEditShadesTooltip(false);
                           }}
                         >
                           <Button prominence="secondary" icon>
@@ -132,6 +134,7 @@ const MoreShadesSection = ({ colorObj, shade }) => {
                       onFocus={e => {
                         e.preventDefault();
                         setOpenCopyTooltip(true);
+                        setOpenEditShadesTooltip(false);
                       }}
                       onBlur={e => {
                         e.preventDefault();
@@ -141,6 +144,7 @@ const MoreShadesSection = ({ colorObj, shade }) => {
                       onMouseEnter={e => {
                         e.preventDefault();
                         setOpenCopyTooltip(true);
+                        setOpenEditShadesTooltip(false);
                       }}
                       onMouseLeave={e => {
                         e.preventDefault();
