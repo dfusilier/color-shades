@@ -14,7 +14,6 @@ const ColorCoordInput = ({
   onFieldChange,
   onSliderChange,
   trackBackground = "transparent",
-  subduedField = false,
   minMaxField = false
 }) => {
 
@@ -23,6 +22,10 @@ const ColorCoordInput = ({
     if (v > max) { return max; }
     return v;
   };
+
+  const sliderValue = !value
+    ? placeholder
+    : minMax(value);
 
   const underMin = value < min;
   const overMax = value > max;
@@ -40,7 +43,6 @@ const ColorCoordInput = ({
           step={step}
           aria-invalid={invalid}
           block
-          subdued={subduedField}
           onChange={e => onFieldChange(e.target.value)}
         />
         { underMin && minMaxField &&
@@ -53,7 +55,7 @@ const ColorCoordInput = ({
 
       <Slider.Root 
         className="SliderRoot" 
-        value={[minMax(value)]} 
+        value={[sliderValue]} 
         min={min} 
         max={max} 
         step={1} 

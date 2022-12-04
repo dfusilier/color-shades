@@ -113,10 +113,9 @@ const ColorCoordForm = ({ color, coordType }) => {
         <ColorCoordInput
           label="↑ Dark end"
           value={coord.start.inputValue}
-          placeholder={coord.base.inputValue}
+          placeholder={coord.base.inputValue || coord.min}
           max={coord.max}
           minMaxField={false}
-          subduedField={coord.start.inputValueIsFallback}
           trackBackground={coord.start.trackBackground}
           onFieldChange={value => handleInputChange(
             coord.start.queryKey,
@@ -134,9 +133,9 @@ const ColorCoordForm = ({ color, coordType }) => {
         <ColorCoordInput
           label="★ Base color"
           value={coord.base.inputValue}
+          placeholder={coord.min}
           max={coord.max}
           minMaxField={true}
-          subduedField={coord.base.inputValueIsFallback}
           trackBackground={coord.base.trackBackground}
           onFieldChange={value => handleInputChange(
             coord.base.queryKey,
@@ -154,10 +153,9 @@ const ColorCoordForm = ({ color, coordType }) => {
         <ColorCoordInput
           label="↓ Light end"
           value={coord.end.inputValue}
-          placeholder={coord.base.inputValue}
+          placeholder={coord.base.inputValue || coord.min}
           max={coord.max}
           minMaxField={false}
-          subduedField={coord.end.inputValueIsFallback}
           trackBackground={coord.end.trackBackground}
           onFieldChange={value => handleInputChange(
             coord.end.queryKey,
@@ -229,14 +227,14 @@ const getHslCoordData = (coordKey, color, queryParams) => {
   start.queryKey = `${coordKey}Start`;
   start.queryValue = queryParams[start.queryKey];
   start.calcValue = start.queryValue || base.calcValue;
-  start.inputValue = isNaN(start.queryValue) ? base.inputValue : start.queryValue;
+  start.inputValue = start.queryValue;
   start.inputValueIsFallback = !start.queryValue;
 
   const end = {};
   end.queryKey = `${coordKey}End`;
   end.queryValue = queryParams[end.queryKey];
   end.calcValue = end.queryValue || base.calcValue;
-  end.inputValue = isNaN(end.queryValue) ? base.inputValue : end.queryValue;
+  end.inputValue = end.queryValue;
   end.inputValueIsFallback = !end.queryValue;
 
   return { name, min, max, start, base, end };

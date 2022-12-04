@@ -4,7 +4,7 @@ const TextField = styled.input.attrs(props => ({
     type: props.type || "text"
 }))`
     background: var(--color-bg);
-    color: ${props => props.subdued ? "var(--color-fg-subdued-more)" : "var(--color-fg)"};
+    color: var(--color-fg);
     border: 3px solid var(--color-fg);
     border-radius: 8px;
     height: 48px;
