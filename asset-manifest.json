@@ -1,12 +1,12 @@
 {
   "files": {
-    "main.js": "/color-shades/static/js/main.8c3dc398.js",
+    "main.js": "/color-shades/static/js/main.06ce1a21.js",
     "static/js/734.b55aba54.chunk.js": "/color-shades/static/js/734.b55aba54.chunk.js",
     "index.html": "/color-shades/index.html",
-    "main.8c3dc398.js.map": "/color-shades/static/js/main.8c3dc398.js.map",
+    "main.06ce1a21.js.map": "/color-shades/static/js/main.06ce1a21.js.map",
     "734.b55aba54.chunk.js.map": "/color-shades/static/js/734.b55aba54.chunk.js.map"
   },
   "entrypoints": [
-    "static/js/main.8c3dc398.js"
+    "static/js/main.06ce1a21.js"
   ]
 }
