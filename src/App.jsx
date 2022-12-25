@@ -103,7 +103,7 @@ const App = () => {
             <Box.Cell className="flex-column gap-0">
               <TitleAndLink>
                 <h1 id="color-shades-heading" className="type-size-4">Color shades</h1>
-                <span className="type-size-00 color-fg-subdued">by <a href="https://twitter.com/davidfusilier">David Fusilier</a></span>
+                <span className="type-size-00 color-fg-subdued">by <a href="www.davidfusilier.com">David Fusilier</a></span>
               </TitleAndLink>
               <p className="type-size-1">Calculate a color's shade and use it to quickly determine color contrast.</p>
             </Box.Cell>
